@@ -112,7 +112,7 @@
                     <span>Programas</span>
                 </a>
 
-                <a href="#" class="px-4 py-3 flex items-center space-x-4 rounded-md text-gray-500 group">
+                <a href="{{ route('timeTable.index') }}" class="px-4 py-3 flex items-center space-x-4 rounded-md text-gray-500 group">
                     <i class="far fa-clock"></i>
                     <span>Horarios</span>
                 </a>

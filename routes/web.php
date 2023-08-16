@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProgramController;
 use App\Http\Controllers\FichaController;
+use App\Http\Controllers\TimeTableController;
 
 
 /*
@@ -33,6 +34,10 @@ Route::middleware(['auth'])->group(function () {
     // Fichas
     Route::get('ficha', [FichaController::class, 'index'])->name('ficha.index');
     Route::post('ficha', [FichaController::class, 'store'])->name('ficha.store');
-    Route::get('ficha/create', [FichaController::class, 'create'])->name('ficha.create');
+    Route::put('ficha/{ficha}', [FichaController::class, 'update'])->name('ficha.update');
     Route::delete('ficha/{ficha}', [FichaController::class, 'destroy'])->name('ficha.destroy');
+
+    //Horarios
+    Route::get('timeTable', [TimeTableController::class, 'index'])->name('timeTable.index');
+    Route::post('timeTable', [TimeTableController::class, 'store'])->name('timeTable.store');
 });

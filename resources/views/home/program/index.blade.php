@@ -54,23 +54,23 @@
                         <a href="javascript:void(0);"
                         class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-1 px-2 rounded mr-2"
                         onclick="editProgram({{ $program->id_program }})">
-                        Editar
+                         Editar
                      </a>
-                     <div class="fixed inset-0 z-50 flex items-center justify-center overflow-x-hidden overflow-y-auto outline-none focus:outline-none" id="editModal" style="display: none;">
+                     <div class="fixed inset-0 z-50 flex items-center justify-center overflow-x-hidden overflow-y-auto outline-none focus:outline-none" id="editModal-{{$program->id_program}}" style="display: none;">
                         <div class="relative w-auto my-6 mx-auto max-w-sm">
                             <div class="bg-white rounded-lg shadow-lg relative flex flex-col w-full p-6">
-                                <span class="absolute top-0 right-0 mt-4 mr-4 cursor-pointer" id="closeEditModal">×</span>
+                                <span class="absolute top-0 right-0 mt-4 mr-4 cursor-pointer" onclick="closeEditModal({{ $program->id_program }})">×</span>
                                 <h2 class="text-lg font-semibold mb-4">Editar Programa</h2>
                                 <form id="editForm" method="POST" class="space-y-4">
                                     @csrf
                                     @method('PUT')
                                     <div class="flex flex-col">
-                                        <label for="edit_name_program">Nombre del Programa</label>
-                                        <input value="{{ $program->name_program }}" type="text" name="name_program" id="edit_name_program" class="rounded-md p-2 border focus:border-green-500">
+                                        <label for="name_program">Nombre del Programa</label>
+                                        <input value="{{ $program->name_program }}" type="text" name="name_program" id="name_program" class="rounded-md p-2 border focus:border-green-500">
                                     </div>
                                     <div class="flex flex-col">
-                                        <label for="edit_code_program">Código del Programa</label>
-                                        <input value="{{ $program->code_program }}" type="number" name="code_program" id="edit_code_program" class="rounded-md p-2 border focus:border-green-500">
+                                        <label for="code_program">Código del Programa</label>
+                                        <input value="{{ $program->code_program }}" type="number" name="code_program" id="code_program" class="rounded-md p-2 border focus:border-green-500">
                                     </div>
                                     <button type="submit" class="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-lg">Editar</button>
                                 </form>
@@ -121,13 +121,22 @@
 @endif
 
 <script>
-    function editProgram(id_program) {
-        const editUrl = `/programa/${id_program}`;
-        document.getElementById("editForm").action = editUrl;
+function editProgram(id_program) {
+    const editUrl = `/programa/${id_program}`;
+    const editModal = document.getElementById(`editModal-${id_program}`);
+    
+    // Setear la acción del formulario y mostrar el modal
+    document.getElementById("editForm", editModal).action = editUrl;
+    editModal.style.display = "block";
+}
 
-        document.getElementById("editModal").style.display = "block";
-    }
+</script>
 
+<script>
+    function closeEditModal(id_program) {
+    const editModal = document.getElementById(`editModal-${id_program}`);
+    editModal.style.display = "none";
+}
 </script>
 
 
@@ -156,14 +165,6 @@
                 $('#delete-form-' + id).submit();
             }
         });
-
-        @if (session('delete') == 'ok')
-        Swal.fire(
-            'Eliminado correctamente',
-            'El programa ha sido eliminado',
-            'success'
-        );
-        @endif
     });
 
 
@@ -176,6 +177,11 @@
         'El programa ha sido eliminado',
         'success'
     );
+
+        // Eliminar el mensaje de éxito de la sesión
+    @php
+        Session::forget('delete');
+    @endphp
 
 </script>
 @endif

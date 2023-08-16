@@ -57,6 +57,45 @@
                         @csrf
                         @method('DELETE')
                     </form>
+
+                    <a href="javascript:void(0);"
+                    class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-1 px-2 rounded"
+                    onclick="editFicha({{ $ficha->id_ficha }})">
+                    Editar
+                    </a>
+                    <div class="fixed inset-0 z-50 flex items-center justify-center overflow-x-hidden overflow-y-auto outline-none focus:outline-none" id="editModal-{{ $ficha->id_ficha }}" style="display: none;">
+                        <div class="relative w-auto my-6 mx-auto max-w-sm">
+                            <div class="bg-white rounded-lg shadow-lg relative flex flex-col w-full p-6">
+                                <span class="absolute top-0 right-0 mt-4 mr-4 cursor-pointer" onclick="closeEditModal({{ $ficha->id_ficha }})">×</span>
+                                <h2 class="text-lg font-semibold mb-4">Editar Ficha</h2>
+                                <form id="editForm-{{ $ficha->id_ficha }}" method="POST" action="{{ route('ficha.update', $ficha->id_ficha) }}" class="space-y-4">
+                                    @csrf
+                                    @method('PUT')
+                                    <div class="flex flex-col">
+                                        <label for="number_ficha">Numero de la ficha</label>
+                                        <input value="{{ $ficha->number_ficha }}" type="number" name="number_ficha" id="number_ficha" class="rounded-md p-2 border focus:border-green-500">
+                                    </div>
+                                    <div class="flex flex-col">
+                                        <label for="programa_id">Programas de formacion disponibles</label>
+                                        <select name="programa_id" id="programa_id" class="rounded-md p-2 border focus:border-green-500">
+                                            @foreach ($programs as $program)
+                                                <option value="{{ $program->id_program }}" @if($program->id_program === $ficha->programa_id) selected @endif>{{ $program->name_program }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="flex flex-col">
+                                        <label for="date_start">Fecha inicio</label>
+                                        <input value="{{ $ficha->date_start }}" type="date" name="date_start" id="date_start" class="rounded-md p-2 border focus:border-green-500">
+                                    </div>
+                                    <div class="flex flex-col">
+                                        <label for="date_end">Fecha finalizacion</label>
+                                        <input value="{{ $ficha->date_end }}" type="date" name="date_end" id="date_end" class="rounded-md p-2 border focus:border-green-500">
+                                    </div>
+                                    <button type="submit" class="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-lg">Editar</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
                     
                 </div>
             </div>
@@ -90,22 +129,24 @@
 @endif
 
 <script>
-    function editProgram(id_program) {
-        const editUrl = `/programa/${id_program}`;
-        document.getElementById("editForm").action = editUrl;
-
-        document.getElementById("editModal").style.display = "block";
+    function editFicha(id_ficha) {
+        const editModal = document.getElementById(`editModal-${id_ficha}`);
+        const editForm = document.getElementById(`editForm-${id_ficha}`);
+        const editUrl = `/ficha/${id_ficha}`;
+        
+        // Setear la acción del formulario y mostrar el modal
+        editForm.action = editUrl;
+        editModal.style.display = "block";
     }
 
+    function closeEditModal(id_ficha) {
+        const editModal = document.getElementById(`editModal-${id_ficha}`);
+        editModal.style.display = "none";
+    }
 </script>
 
 
-
     <script>
-
-    
-
-
     $('.form-delete').click(function(e) {
         e.preventDefault();
 
@@ -125,14 +166,6 @@
                 $('#delete-form-' + id).submit();
             }
         });
-
-        @if (session('delete') == 'ok')
-        Swal.fire(
-            'Eliminado correctamente',
-            'El programa ha sido eliminado',
-            'success'
-        );
-        @endif
     });
 
 
@@ -145,6 +178,11 @@
         'El programa ha sido eliminado',
         'success'
     );
+
+        // Elimininamos el mensaje de éxito de la sesión
+    @php
+        Session::forget('delete');
+    @endphp
 
 </script>
 @endif

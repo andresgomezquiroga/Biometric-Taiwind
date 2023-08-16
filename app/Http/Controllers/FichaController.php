@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Ficha;
 use App\Models\Program;
+use App\Models\timeTable;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 
@@ -42,11 +43,12 @@ class FichaController extends Controller
             'programa_id' => 'required',
         ]);
 
-        Ficha::create([
-            'number_ficha' => $request->input('number_ficha'),
-            'date_start' => $request->input('date_start'),
-            'date_end' => $request->input('date_end'),
-            'programa_id' => $request->input('programa_id'),
+        $jornada = $request->input('jornada');
+        timeTable::create([
+            'jornada' => $jornada,
+            'time_start' => $request->input('time_start'),
+            'time_end' => $request->input('time_end'),
+            'ficha_id' => $request->input('ficha_id'),
         ]);
 
         Session::flash('success', 'Ficha creado correctamente.');
@@ -77,6 +79,22 @@ class FichaController extends Controller
     public function update(Request $request, Ficha $ficha)
     {
         //
+        $request->validate([
+            'number_ficha' => 'required',
+            'date_start' => 'required|date',
+            'date_end' => 'required|date',
+            'programa_id' => 'required',
+        ]);
+
+        $ficha->update([
+            'number_ficha' => $request->input('number_ficha'),
+            'date_start' => $request->input('date_start'),
+            'date_end' => $request->input('date_end'),
+            'programa_id' => $request->input('programa_id'),
+        ]);
+
+        Session::flash('success', 'Ficha actualizado correctamente.');
+        return redirect()->route('ficha.index');
     }
 
     /**
