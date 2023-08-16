@@ -57,7 +57,7 @@
                                         </div>
                                         Datos personales
                                     </a>
-                                
+
                                 </li>
                                 <hr class="dark:border-gray-700">
                                 <li class="font-medium">
@@ -96,7 +96,7 @@
                     <span class="-mr-1 font-medium">Inicio</span>
                 </a>
 
-                <a href="#" class="px-4 py-3 flex items-center space-x-4 rounded-md text-gray-500 group">
+                <a href="{{route ('user.index')}}" class="px-4 py-3 flex items-center space-x-4 rounded-md text-gray-500 group">
                     <i class="fas fa-users"></i>
                     <span>Usuarios</span>
                 </a>

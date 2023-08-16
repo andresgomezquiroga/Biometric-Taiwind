@@ -3,7 +3,7 @@
 @section('contenido')
 <div class="py-6 px-8">
     <button class="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-lg mb-4" id="openModal">Agregar horario</button>
-    
+
     <!-- Modal -->
     <div class="fixed inset-0 z-50 flex items-center justify-center overflow-x-hidden overflow-y-auto outline-none focus:outline-none" id="myModal" style="display: none;">
         <div class="relative w-auto my-6 mx-auto max-w-sm">
@@ -15,8 +15,8 @@
                     <select class="rounded-md p-2 border focus:border-green-500" id="jornada" name="jornada">
                         <option selected disabled>Seleccione la jornada</option>
                         <option value="Manana"{{ old('jornada') == 'Manana' ?  'selected' : '' }}>Mañana</option>
-                        <option value="Tarde" {{ old('jornada') == 'Tarde' ? 'selected' : '' }}>Tarde</option>
                         <option value="Mixta" {{ old('jornada') == 'Mixta' ? 'selected' : '' }}>Mixta</option>
+                        <option value="Noche" {{ old('jornada') == 'Noche' ? 'selected' : '' }}>Noche</option>
                     </select>
                     <div class="flex flex-col">
                         <label for="time_start">Hora comienzo</label>
@@ -45,8 +45,8 @@
 
     <div class="bg-white p-4 rounded-md mt-4 overflow-auto sm:overflow-visible md:overflow-hidden lg:overflow-x-scroll xl:overflow-y-scroll">
         <h2 class="text-gray-500 text-lg font-semibold pb-4">Horarios</h2>
-        <div class="my-1"></div> 
-        <div class="bg-gradient-to-r from-green-300 to-cyan-500 h-px mb-6 "></div> 
+        <div class="my-1"></div>
+        <div class="bg-gradient-to-r from-green-300 to-cyan-500 h-px mb-6 "></div>
         <table class="w-full table-auto text-sm ">
             <thead>
                 <tr class="text-sm leading-normal">
@@ -68,10 +68,10 @@
                     <td class="py-2 px-4 border-b border-grey-light">{{$timeTable->time_end}}</td>
                     <td class="py-2 px-4 border-b border-grey-light">{{$timeTable->ficha->number_ficha}}</td>
                     <td class="py-2 px-4 border-b border-grey-light text-right">
-                        
+
                 </tr>
-                @endforeach 
-                
+                @endforeach
+
             </tbody>
         </table>
         <div class="text-right mt-4">
@@ -87,7 +87,7 @@
 @section('js')
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    
+
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
@@ -107,7 +107,7 @@
 function editProgram(id_timeTable) {
     const editUrl = `/timeTable/${id_timeTable}`;
     const editModal = document.getElementById(`editModal-${id_timeTable}`);
-    
+
     // Setear la acción del formulario y mostrar el modal
     document.getElementById("editForm", editModal).action = editUrl;
     editModal.style.display = "block";
@@ -126,7 +126,7 @@ function editProgram(id_timeTable) {
 
     <script>
 
-    
+
 
 
     $('.form-delete').click(function(e) {

@@ -26,7 +26,7 @@ class FichaController extends Controller
      */
     public function create()
     {
-        $programs = Program::all(); 
+        $programs = Program::all();
         return view('home.ficha.create', compact('programs'));
     }
 
@@ -43,18 +43,17 @@ class FichaController extends Controller
             'programa_id' => 'required',
         ]);
 
-        $jornada = $request->input('jornada');
-        timeTable::create([
-            'jornada' => $jornada,
-            'time_start' => $request->input('time_start'),
-            'time_end' => $request->input('time_end'),
-            'ficha_id' => $request->input('ficha_id'),
+        Ficha::create([
+            'number_ficha' => $request->input('number_ficha'),
+            'date_start' => $request->input('date_start'),
+            'date_end' => $request->input('date_end'),
+            'programa_id' => $request->input('programa_id'),
         ]);
 
         Session::flash('success', 'Ficha creado correctamente.');
 
         return redirect()->route('ficha.index');
-        
+
     }
 
     /**

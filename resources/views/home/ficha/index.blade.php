@@ -4,7 +4,7 @@
 
 <div class="py-6 px-8">
     <a href="#" class="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-lg mb-4" id="openModal">Agregar Ficha</a>
-    
+
     <!-- Modal -->
     <div class="fixed inset-0 z-50 flex items-center justify-center overflow-x-hidden overflow-y-auto outline-none focus:outline-none" id="myModal" style="display: none;">
         <div class="relative w-auto my-6 mx-auto max-w-sm">
@@ -96,7 +96,7 @@
                             </div>
                         </div>
                     </div>
-                    
+
                 </div>
             </div>
         @endforeach
@@ -105,14 +105,14 @@
 </div>
 
 
- 
+
 @endsection
 
 
 @section('js')
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    
+
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
@@ -133,7 +133,7 @@
         const editModal = document.getElementById(`editModal-${id_ficha}`);
         const editForm = document.getElementById(`editForm-${id_ficha}`);
         const editUrl = `/ficha/${id_ficha}`;
-        
+
         // Setear la acción del formulario y mostrar el modal
         editForm.action = editUrl;
         editModal.style.display = "block";

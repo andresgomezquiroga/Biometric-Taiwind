@@ -34,19 +34,19 @@ class TimeTableController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'jornada' => 'required|in:Manana,Tarde,Mixta',
+            'jornada' => 'required|in:Manana,Mixta,Noche',
             'time_start' => 'required|date_format:H:i', // Formato de tiempo en horas y minutos
             'time_end' => 'required|date_format:H:i',
             'ficha_id' => 'required',
         ]);
-    
+
         timeTable::create([
-            'jornada' => 'Manana', 'Mixta', 'Noche',
+            'jornada' => $request->input('jornada'),
             'time_start' => $request->input('time_start'),
             'time_end' => $request->input('time_end'),
             'ficha_id' => $request->input('ficha_id'),
         ]);
-    
+
         session()->flash('success', 'Horario creado correctamente.');
         return redirect()->route('timeTable.index');
     }
