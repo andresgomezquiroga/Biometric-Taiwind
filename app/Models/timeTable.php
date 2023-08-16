@@ -9,6 +9,8 @@ class timeTable extends Model
 {
     use HasFactory;
 
+    protected $primaryKey = 'id_timeTable';
+
     protected $fillable = [
         'jornada',
         'time_start',

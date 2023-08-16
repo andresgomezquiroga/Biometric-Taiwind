@@ -70,9 +70,26 @@ class TimeTableController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, timeTable $timeTable)
+    public function update(Request $request, $id)
     {
-        //
+        $timeTable = TimeTable::findOrFail($id);
+
+        $request->validate([
+            'jornada' => 'required|in:Manana,Mixta,Noche',
+            'time_start' => 'required|date_format:H:i',
+            'time_end' => 'required|date_format:H:i',
+            'ficha_id' => 'required',
+        ]);
+
+        $timeTable->update([
+            'jornada' => $request->input('jornada'),
+            'time_start' => $request->input('time_start'),
+            'time_end' => $request->input('time_end'),
+            'ficha_id' => $request->input('ficha_id'),
+        ]);
+
+        session()->flash('success', 'Horario actualizado correctamente.');
+        return redirect()->route('timeTable.index');
     }
 
     /**
@@ -81,5 +98,9 @@ class TimeTableController extends Controller
     public function destroy(timeTable $timeTable)
     {
         //
+        $timeTable->delete();
+
+        session()->flash('delete', 'ok');
+        return redirect()->route('timeTable.index');
     }
 }

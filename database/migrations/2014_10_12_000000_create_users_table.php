@@ -19,7 +19,6 @@ return new class extends Migration
             $table->integer('edad');
             $table->enum('type_document', ['CC', 'TI', 'CE']);
             $table->integer('number_document');
-            $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();

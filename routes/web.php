@@ -42,10 +42,15 @@ Route::middleware(['prevent', 'auth'])->group(function () {
     //Horarios
     Route::get('timeTable', [TimeTableController::class, 'index'])->name('timeTable.index');
     Route::post('timeTable', [TimeTableController::class, 'store'])->name('timeTable.store');
+    Route::put('timeTable/{timeTable}', [TimeTableController::class, 'update'])->name('timeTable.update');
+    Route::delete('timeTable/{timeTable}', [TimeTableController::class, 'destroy'])->name('timeTable.destroy');
 
 
     // Usuarios
     Route::get('user', [UserController::class , 'index'])->name('user.index');
     Route::post('user', [UserController::class , 'store'])->name('user.store');
+    Route::put('user/{user}', [UserController::class , 'update'])->name('user.update');
+    Route::delete('user/{user}', [UserController::class , 'destroy'])->name('user.destroy');
+
 
 });

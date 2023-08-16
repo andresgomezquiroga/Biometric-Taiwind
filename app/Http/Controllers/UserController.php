@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use Illuminate\Contracts\Session\Session;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
@@ -33,13 +34,18 @@ class UserController extends Controller
         $validatedData = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'last_name' => ['required', 'string', 'max:255'],
-            'age' => ['required', 'integer', 'min:0'],
+            'edad' => ['required', 'integer', 'min:0'], 
             'type_document' => ['required', Rule::in(['CC', 'TI', 'CE'])],
             'number_document' => ['required', 'integer', 'min:0'],
             'email' => ['required', 'email', 'unique:users'],
-            'password' => ['required', 'string', 'min:8'],
+            'password' => ['required', 'string'],
         ]);
-
+    
+        User::create($validatedData);
+    
+        session()->flash('success', 'Usuario creado exitosamente.');
+    
+        return redirect()->route('user.index');
     }
 
     /**
@@ -64,6 +70,23 @@ class UserController extends Controller
     public function update(Request $request, string $id)
     {
         //
+
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
+            'edad' => 'required|integer|min:0',
+            'type_document' => ['required', Rule::in(['CC', 'TI', 'CE'])],
+            'number_document' => 'required|integer|min:0',
+            'email' => 'required|email',
+            'password' => 'required|string',
+        ]);
+
+        $user = User::findOrFail($id);
+
+        $user->update($request->all());
+    
+        return redirect()->route('user.index')->with('success', 'Usuario actualizado exitosamente.');
+
     }
 
     /**
@@ -72,5 +95,9 @@ class UserController extends Controller
     public function destroy(string $id)
     {
         //
+        $id = User::findOrFail($id);
+        $id->delete();
+        return redirect()->route('user.index');
+        session()->flash('delete', 'ok');
     }
 }
