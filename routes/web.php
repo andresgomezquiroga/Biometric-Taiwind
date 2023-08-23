@@ -23,6 +23,10 @@ use App\Http\Controllers\AttendanceController;
 */
 
 Route::get('/', [AuthController::class, 'login'])->name('login');
+Route::get('/recoveryPassword', [AuthController::class, 'recoveryPassword'])->name('recoveryPassword');
+Route::post('/recoveryPassword', [AuthController::class, 'updatePassword'])->name('recoveryPassword');
+Route::get('showVerifyCode/{token}', [AuthController::class, 'showVerifyCode']);
+Route::post('verifyCode', [AuthController::class, 'verifyCode'])->name('verifyCode');
 Route::post('/auth', [AuthController::class, 'authenticate'])->name('auth');
 Route::post('/logout', [AuthController::class,  'logout'])->name('logout');
 

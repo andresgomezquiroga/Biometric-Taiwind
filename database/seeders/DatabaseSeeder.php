@@ -18,5 +18,16 @@ class DatabaseSeeder extends Seeder
         //     'name' => 'Test User',
         //     'email' => 'test@example.com',
         // ]);
+
+        \App\Models\User::factory()->create([
+            'name' => 'Test',
+            'last_name' => 'Test',
+            'email' => 'test@example.com',
+            'edad' => 18,
+            'type_document' => 'CC',
+            'number_document' => '123456789',
+            'image' => null,
+            'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
+        ]);
     }
 }
