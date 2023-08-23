@@ -22,14 +22,22 @@
 
                 <div x-data="{ open: false }" class="bg-white  w-64  justify-center items-center">
                     <div @click="open = !open" class="relative border-b-4 border-transparent py-3"
-                        :class="{ 'border-indigo-700 transform transition duration-300 ': open }"
+                        :class="{ 'border-green-700 transform transition duration-300 ': open }"
                         x-transition:enter-end="transform opacity-100 scale-100"
                         x-transition:leave="transition ease-in duration-75"
                         x-transition:leave-start="transform opacity-100 scale-100">
                         <div class="flex justify-center items-center space-x-3 cursor-pointer">
                             <div class="w-12 h-12 rounded-full overflow-hidden border-2 dark:border-white border-gray-900">
-                                <img src="https://images.unsplash.com/photo-1610397095767-84a5b4736cbd?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=750&q=80"
-                                    alt="" class="w-full h-full object-cover">
+                                @if (Auth::user()->image && file_exists(public_path('img/imagesUsers/' . Auth::user()->image)))
+                                    <img class="w-full h-full object-cover"
+                                        src="{{ asset('img/imagesUsers/' . Auth::user()->image) }}"
+                                        alt="{{ Auth::user()->name }}">
+                                @else
+                                    <img class="w-full h-full object-cover"
+                                        src="{{ asset('img/user_default.png') }}" alt="Imagen por defecto">
+                                @endif
+                                <!--img src="https://images.unsplash.com/photo-1610397095767-84a5b4736cbd?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=750&q=80"
+                                        alt="" class="w-full h-full object-cover"-->
                             </div>
                             <div class="font-semibold text-black text-lg">
                                 <div class="cursor-pointer">{{ Auth::user()->name }} {{ Auth::user()->last_name }}</div>
@@ -42,11 +50,11 @@
                             x-transition:leave="transition ease-in duration-75"
                             x-transition:leave-start="transform opacity-100 scale-100"
                             x-transition:leave-end="transform opacity-0 scale-95"
-                            class="absolute w-60 px-5 py-3 dark:bg-gray-800 bg-white rounded-lg shadow border dark:border-transparent mt-5">
-                            <ul class="space-y-3 dark:text-white">
+                            class="absolute w-60 px-5 py-3   rounded-lg shadow border dark:border-transparent mt-5">
+                            <ul class="space-y-3 dark:text-black">
                                 <li class="font-medium">
-                                    <a href="#"
-                                        class="flex items-center transform transition-colors duration-200 border-r-4 border-transparent hover:border-indigo-700">
+                                    <a href="{{ route('user.profile') }}"
+                                        class="flex items-center transform transition-colors duration-200 border-r-4 border-transparent hover:border-green-700">
                                         <div class="mr-3">
                                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                                                 xmlns="http://www.w3.org/2000/svg">
@@ -96,12 +104,14 @@
                     <span class="-mr-1 font-medium">Inicio</span>
                 </a>
 
-                <a href="{{route ('user.index')}}" class="px-4 py-3 flex items-center space-x-4 rounded-md text-gray-500 group">
+                <a href="{{ route('user.index') }}"
+                    class="px-4 py-3 flex items-center space-x-4 rounded-md text-gray-500 group">
                     <i class="fas fa-users"></i>
                     <span>Usuarios</span>
                 </a>
 
-                <a href="{{ route('ficha.index') }}" class="px-4 py-3 flex items-center space-x-4 rounded-md text-gray-500 group">
+                <a href="{{ route('ficha.index') }}"
+                    class="px-4 py-3 flex items-center space-x-4 rounded-md text-gray-500 group">
                     <i class="fas fa-id-card"></i>
                     <span>Fichas</span>
                 </a>
@@ -112,19 +122,28 @@
                     <span>Programas</span>
                 </a>
 
-                <a href="{{ route('timeTable.index') }}" class="px-4 py-3 flex items-center space-x-4 rounded-md text-gray-500 group">
+                <a href="{{ route('timeTable.index') }}"
+                    class="px-4 py-3 flex items-center space-x-4 rounded-md text-gray-500 group">
                     <i class="far fa-clock"></i>
                     <span>Horarios</span>
                 </a>
 
-                <a href="#" class="px-4 py-3 flex items-center space-x-4 rounded-md text-gray-500 group">
+                <a href="{{ route('excuse.index') }}"
+                    class="px-4 py-3 flex items-center space-x-4 rounded-md text-gray-500 group">
                     <i class="fas fa-file-alt"></i>
                     <span>Excusas</span>
                 </a>
 
-                <a href="#" class="px-4 py-3 flex items-center space-x-4 rounded-md text-gray-500 group">
+                <a href="{{ route('competence.index') }}"
+                    class="px-4 py-3 flex items-center space-x-4 rounded-md text-gray-500 group">
                     <i class="fas fa-trophy"></i>
                     <span>Competencias</span>
+                </a>
+
+                <a href="{{ route('attendance.index') }}"
+                    class="px-4 py-3 flex items-center space-x-4 rounded-md text-gray-500">
+                    <i class="fas fa-check-circle text-green-500"></i>
+                    <span>Asistencias</span>
                 </a>
 
             </div>

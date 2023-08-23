@@ -39,6 +39,10 @@
         </div>
     </div>
 
+    <!-- Modal de aprendizes-->
+
+
+
     <div class="grid mt-10 grid-cols-3 gap-4">
         @foreach ($fichas as $ficha)
             <div class="max-w-sm rounded overflow-hidden shadow-lg">
@@ -96,7 +100,28 @@
                             </div>
                         </div>
                     </div>
-
+                    <button class="bg-green-500 hover:bg-green-600 text-white font-semibold py-1 px-2 rounded" onclick="openAddAprendizModal({{ $ficha->id_ficha }})">
+                        Añadir aprendiz
+                    </button>
+                    <div class="fixed inset-0 z-50 flex items-center justify-center overflow-x-hidden overflow-y-auto outline-none focus:outline-none" id="addAprendizModal" style="display: none;">
+                        <div class="relative w-auto my-6 mx-auto max-w-sm">
+                            <div class="bg-white rounded-lg shadow-lg relative flex flex-col w-full p-6">
+                                <span class="absolute top-0 right-0 mt-4 mr-4 cursor-pointer" id="closeModal" onclick="closeAddAprendizModal()">×</span>
+                                <h1 class="text-lg font-semibold mb-4">Agregar Aprendiz</h1>
+                                <span class="text-gray-700">Ficha: {{ $ficha->number_ficha }}</span>
+                                <form action="{{ route('ficha.addAprendiz') }}" method="POST" class="space-y-4">
+                                    @csrf
+                                    <input type="hidden" name="ficha_id" value="{{ $ficha->id_ficha }}">
+                                    <div class="flex flex-col">
+                                        <label for="documento">Documento de Identidad del Aprendiz</label>
+                                        <input type="number" name="documento" class="rounded-md p-2 border focus:border-green-500">
+                                    </div>
+                                    <button class="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded">Agregar</button>
+                                    <a href="{{ route('ficha.index_members', ['fichaId' => $ficha->id_ficha]) }}" class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded">Visualizar integrantes</a>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         @endforeach
@@ -208,4 +233,40 @@
             }
         }
     </script>
+
+<script>
+    var addAprendizModal = document.getElementById("addAprendizModal");
+ 
+    function closeAddAprendizModal() {
+        addAprendizModal.style.display = "none";
+    }
+ 
+    function openAddAprendizModal(id_ficha) {
+        addAprendizModal.style.display = "block";
+
+    }
+ </script>
+
+@if (session('addAprendiz'))
+<script>
+    Swal.fire({
+        icon: 'success',
+        title: '{{ session('addAprendiz') }}',
+        showConfirmButton: false,
+        timer: 1500
+    });
+</script>
+
+@elseif (session('errorAprendiz'))
+<script>
+    Swal.fire({
+        icon: 'error',
+        title: '{{ session('errorAprendiz') }}',
+        showConfirmButton: false,
+        timer: 1500
+    });
+</script>
+
+@endif
+
 @endsection

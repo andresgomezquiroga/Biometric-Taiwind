@@ -17,4 +17,9 @@ class Ficha extends Model
     {
         return $this->belongsTo(Program::class, 'programa_id');
     }
+
+    public function members()
+    {
+        return $this->belongsToMany(User::class, 'members_fichas', 'ficha_id', 'user_id');
+    }
 }

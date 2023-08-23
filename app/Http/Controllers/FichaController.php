@@ -4,9 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Models\Ficha;
 use App\Models\Program;
+use App\Models\User;
 use App\Models\timeTable;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
+
+use App\Exports\AprendicesExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class FichaController extends Controller
 {
@@ -105,4 +109,45 @@ class FichaController extends Controller
         $ficha->delete();
         return redirect()->route('ficha.index')->with('delete', 'ok');
     }
+
+
+    // Añadir aprendices
+
+    public function addAprendiz(Request $request)
+    {
+        $validatedData = $request->validate([
+            'documento' => 'required|numeric',
+            'ficha_id' => 'required|exists:fichas,id_ficha',
+        ]);
+
+        $user = User::where('number_document', $validatedData['documento'])->first();
+
+        if (!$user) {
+            return redirect()->back()->with('errorAprendiz', 'El usuario no existe.');
+        }
+
+        $ficha = Ficha::findOrFail($validatedData['ficha_id']);
+
+        // Asociar al usuario a la ficha
+        $ficha->members()->attach($user->id);
+
+        return redirect()->back()->with('addAprendiz', 'Aprendiz agregado exitosamente.');
+    }
+
+    public function index_Aprendiz(Request $request, $fichaId)
+    {
+        $fichas = Ficha::findOrFail($fichaId);
+
+
+        // Obtener los integrantes de la ficha
+        $aprendizes = $fichas->members;
+
+        return view('home.ficha.index_members', compact('fichas','aprendizes'));
+    }
+
+    public function exportExcel($fichaId)
+    {
+        return Excel::download(new AprendicesExport($fichaId), 'aprendices.xlsx');
+    }
+
 }

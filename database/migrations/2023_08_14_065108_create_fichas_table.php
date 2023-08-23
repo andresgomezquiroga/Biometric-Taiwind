@@ -18,6 +18,8 @@ return new class extends Migration
             $table->date('date_end');
             $table->unsignedBigInteger('programa_id')->nullable();
             $table->foreign('programa_id')->references('id_program')->on('programs');
+            $table->unsignedBigInteger('user_id')->nullable();
+            $table->foreign('user_id')->references('id')->on('users');
             $table->timestamps();
         });
     }
