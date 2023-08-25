@@ -5,12 +5,12 @@ namespace App\Exports;
 use App\Models\Ficha;
 use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\WithHeadings;
-use Maatwebsite\Excel\Concerns\Exportable;
+
+
 
 class AprendicesExport implements FromQuery, WithHeadings
 {
-    use Exportable;
-
+    
     protected $fichaId;
 
     public function __construct($fichaId)
