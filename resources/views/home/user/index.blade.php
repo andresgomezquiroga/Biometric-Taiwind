@@ -77,10 +77,46 @@
                                 <span class="text-red-500">{{ $message }}</span>
                             @enderror
                         </div>
+                        <div class="flex flex-col">
+                            <label for="">Asignar rol</label>
+                            <div x-data="{
+                                options: [],
+                                open: false,
+                                filter: ''
+                            }" class="w-full relative">
+                                <div @click="open = !open"
+                                    class="p-3 rounded-lg flex gap-2 w-full border border-neutral-300 cursor-pointer truncate h-12 bg-white"
+                                    x-text="options.length + ' roles seleccionado'">
+                                </div>
+                                <div class="p-3 rounded-lg flex gap-3 w-full shadow-lg x-50 absolute flex-col bg-white mt-3"
+                                    x-show="open" x-trap="open" @click.outside="open = false"
+                                    @keydown.escape.window="open = false"
+                                    x-transition:enter=" ease-[cubic-bezier(.3,2.3,.6,1)] duration-200"
+                                    x-transition:enter-start="!opacity-0 !mt-0" x-transition:enter-end="!opacity-1 !mt-3"
+                                    x-transition:leave=" ease-out duration-200" x-transition:leave-start="!opacity-1 !mt-3"
+                                    x-transition:leave-end="!opacity-0 !mt-0">
+                                    @foreach ($roles as $role)
+                                        <div x-show="$el.innerText.toLowerCase().includes(filter.toLowerCase())"
+                                            class="flex items-center">
+                                            <input x-model="options" id="{{ $role->name }}" type="checkbox"
+                                                value="{{ $role->name }}" name="roles[]"
+                                                class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500">
+                                            <label for="{{ $role->name }}"
+                                                class="ml-2 text-sm font-medium text-gray-900 flex-grow">{{ $role->name }}</label>
+                                        </div>
+                                    @endforeach
+                                </div>
+                                @error('roles')
+                                    <span class="text-red-500">{{ $message }}</span>
+                                @enderror
+                            </div>
+
+                        </div>
+
                         <!--div class="flex flex-col">
-                            <label for="">Subir imagen </label>
-                            <input class="" type="file" name="image" id="image">
-                        </div-->
+                                            <label for="">Subir imagen </label>
+                                            <input class="" type="file" name="image" id="image">
+                                        </div-->
 
                         <button type="submit"
                             class="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-lg">Agregar</button>
@@ -133,6 +169,12 @@
 
                         <th
                             class="py-2 px-4 bg-grey-lightest font-bold uppercase text-sm text-grey-light border-b border-grey-light text-center">
+                            Roles
+                        </th>
+
+
+                        <th
+                            class="py-2 px-4 bg-grey-lightest font-bold uppercase text-sm text-grey-light border-b border-grey-light text-center">
                             Acciones
                         </th>
 
@@ -150,9 +192,18 @@
                             <td class="py-2 px-4 border-b border-grey-light text-center">{{ $user->type_document }}</td>
                             <td class="py-2 px-4 border-b border-grey-light text-center">{{ $user->number_document }}</td>
                             <td class="py-2 px-4 border-b border-grey-light text-center">
+                                @foreach ($user->roles as $role)
+                                    {{ $role->name }}
+                                    @if (!$loop->last)
+                                        ,
+                                    @endif
+                                @endforeach
+                            </td>
+                            <td class="py-2 px-4 border-b border-grey-light text-center">
                                 @if ($user->image && file_exists(public_path('img/imagesUsers/' . $user->image)))
                                     <img class="profile-user-img img-fluid img-circle"
-                                        src="{{ asset('img/imagesUsers/' . $user->image) }}" alt="{{ $user->name }}">
+                                        src="{{ asset('img/imagesUsers/' . $user->image) }}" alt="{{ $user->name }}"
+                                        height="60" width="60">
                                 @else
                                     <img class="profile-user-img img-fluid img-circle"
                                         src="{{ asset('img/user_default.png') }}" alt="Imagen por defecto">
@@ -250,18 +301,35 @@
                                                     @enderror
                                                 </div>
                                                 <div class="flex flex-col">
-                                                    @if ($user->image && file_exists(public_path('img/imagesUsers/' . $user->image )))
+                                                    @if ($user->image && file_exists(public_path('img/imagesUsers/' . $user->image)))
                                                         <img class="mx-auto"
                                                             src="{{ asset('img/imagesUsers/' . $user->image) }}"
                                                             alt="{{ $user->name }} " width="100" height="50">
                                                     @else
-                                                        <img class="mx-auto"
-                                                            src="{{ asset('img/user_default.png') }}"
+                                                        <img class="mx-auto" src="{{ asset('img/user_default.png') }}"
                                                             alt="Imagen por defecto" width="50" height="50">
                                                     @endif
                                                     <!--img class="mx-auto" src="{{ asset('img/imagesUsers/' . $user->image) }}" width="100" height="100"-->
-                                                        <input class="" type="file" name="image" id="image">
+                                                    <input class="" type="file" name="image" id="image">
                                                 </div>
+
+                                                <div class="flex flex-col">
+                                                    <label for="roles">Roles</label>
+                                                    @foreach($roles as $role)
+                                                        <div class="flex items-center">
+                                                            <input id="role_{{ $role->id }}" type="checkbox" name="roles[]"
+                                                                   value="{{ $role->name }}"
+                                                                   class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
+                                                                   @if($user->hasRole($role)) checked @endif>
+                                                            <label for="role_{{ $role->id }}"
+                                                                   class="ml-2 text-sm font-medium text-gray-900 flex-grow">{{ $role->name }}</label>
+                                                        </div>
+                                                    @endforeach
+                                                    @error('roles')
+                                                        <span class="text-red-500">{{ $message }}</span>
+                                                    @enderror
+                                                </div>
+
 
 
                                                 <button type="submit"

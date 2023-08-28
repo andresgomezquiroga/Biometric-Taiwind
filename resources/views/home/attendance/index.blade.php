@@ -2,8 +2,11 @@
 
 @section('contenido')
     <div class="py-6 px-8">
+
+        @can('attendance.store')
         <button class="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-lg mb-4"
             id="openModal">Agregar Asistencia</button>
+        @endcan
 
         <!-- Modal -->
         <div class="fixed inset-0 z-50 flex items-center justify-center overflow-x-hidden overflow-y-auto outline-none focus:outline-none"
@@ -40,6 +43,15 @@
                             @error('time_attendance')
                                 <span class="text-red-500">{{ $message }}</span>
                             @enderror
+                        </div>
+                        <div class="flex flex-col">
+                            <label for="user_id">Aprendices</label>
+                            <select name="user_id" id="user_id" class="rounded-md p-2 border focus:border-green-500">
+                                @foreach ($aprendices as $aprendice)
+                                    <option value="{{ $aprendice->id }}">Nombre completo: {{ $aprendice->name }} {{$aprendice->last_name}}
+                                    </option>
+                                @endforeach
+                            </select>
                         </div>
                         <!-- Campo de comentarios -->
                         <div class="flex flex-col">
@@ -81,12 +93,18 @@
 
                         <th
                             class="py-2 px-4 bg-grey-lightest font-bold uppercase text-sm text-grey-light border-b border-grey-light text-center">
+                            Aprendices con sus asistencias</th>
+
+                        <th
+                            class="py-2 px-4 bg-grey-lightest font-bold uppercase text-sm text-grey-light border-b border-grey-light text-center">
                             Descripcion</th>
 
+                        @can('attendance.destroy')
                         <th
                             class="py-2 px-4 bg-grey-lightest font-bold uppercase text-sm text-grey-light border-b border-grey-light text-center">
                             Acciones
                         </th>
+                        @endcan
 
 
                     </tr>
@@ -97,13 +115,17 @@
                             <td class="py-2 px-4 border-b border-grey-light text-center">{{ $attendance->code_attendance }}</td>
                             <td class="py-2 px-4 border-b border-grey-light text-center">{{ $attendance->name_attendance }}</td>
                             <td class="py-2 px-4 border-b border-grey-light text-center">{{ $attendance->time_attendance }}</td>
+                            <td class="py-2 px-4 border-b border-grey-light text-center">{{$attendance->user->name}} {{$attendance->user->last_name}}</td>
                             <td class="py-2 px-4 border-b border-grey-light text-center">{{ $attendance->description }}</td>
                             <td class="py-2 px-4 border-b border-grey-light text-center">
+
+                            @can('attendance.update')
                             <a href="javascript:void(0);"
                                 class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-1 px-2 rounded"
                                 onclick="editUser({{ $attendance->id_attendance }})">
                                 Editar
                             </a>
+                            @endcan
 
                             <div class="fixed inset-0 z-50 flex items-center justify-center overflow-x-hidden overflow-y-auto outline-none focus:outline-none"
                                 id="editModal-{{ $attendance->id_attendance }}" style="display: none;">
@@ -132,7 +154,7 @@
                                                     <span class="text-red-500">{{ $message }}</span>
                                                 @enderror
                                             </div>
-                                            
+
                                             <div class="flex flex-col">
                                                 <label for="time_attendance">Hora de la asistencia</label>
                                                 <input value="{{ $attendance->time_attendance }}" type="time" name="time_attendance"
@@ -143,8 +165,24 @@
                                             </div>
 
                                             <div class="flex flex-col">
+                                                <label for="user_id">Instructores disponibles</label>
+                                                <select name="user_id" id="user_id"
+                                                    class="rounded-md p-2 border focus:border-green-500">
+                                                    @foreach ($aprendices as $aprendice)
+                                                        <option value="{{ $aprendice->id }}"
+                                                            @if ($aprendice->id === $attendance->user_id) selected @endif>
+                                                            Nombre completo: {{ $aprendice->name }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                                @error('user_id')
+                                                <span class="text-red-500">{{ $message }}</span>
+                                                @enderror
+                                            </div>
+
+                                            <div class="flex flex-col">
                                                 <label for="description">Descripcion de la asistencia</label>
-                                                <textarea value="{{ $attendance->description }}" class="rounded-md p-2 border focus:border-green-500" 
+                                                <textarea value="{{ $attendance->description }}" class="rounded-md p-2 border focus:border-green-500"
                                                     name="description" id="com" cols="30" rows="10"></textarea>
                                                 @error('description')
                                                     <span class="text-red-500">{{ $message }}</span>
@@ -156,11 +194,15 @@
                                     </div>
                                 </div>
                             </div>
+
+                            @can('attendance.destroy')
                             <button
                                 class="bg-red-500 hover:bg-red-600 text-white font-semibold py-1 px-2 rounded form-delete"
                                 data-id="{{ $attendance->id_attendance }}">
                                 Eliminar
                             </button>
+                            @endcan
+
                             <form id="delete-form-{{ $attendance->id_attendance }}" action="{{ route('attendance.destroy', $attendance->id_attendance) }}"
                                 method="POST" style="display: none;">
                                 @csrf

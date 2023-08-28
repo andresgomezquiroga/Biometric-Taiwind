@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Attendance;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
+use App\Models\User;
 
 class AttendanceController extends Controller
 {
@@ -16,7 +17,9 @@ class AttendanceController extends Controller
         //
 
         $attendances = Attendance::all();
-        return view('home.attendance.index', compact('attendances'));
+        $users = User::all();
+        $aprendices = User::role(['aprendiz'])->get();
+        return view('home.attendance.index', compact('attendances', 'aprendices'));
     }
 
     /**
@@ -39,6 +42,7 @@ class AttendanceController extends Controller
             'code_attendance' => 'required|integer|unique:attendances',
             'time_attendance' => 'required|string|max:255',
             'description' => 'required|string|max:255',
+            'user_id' => 'required'
 
         ]);
 
@@ -47,6 +51,7 @@ class AttendanceController extends Controller
             'code_attendance' => $request->input('code_attendance'),
             'time_attendance' => $request->input('time_attendance'),
             'description' => $request->input('description'),
+            'user_id' => $request->input('user_id')
         ]);
 
         Session::flash('success', 'Asistencia creada exitosamente.');
@@ -83,6 +88,7 @@ class AttendanceController extends Controller
             'code_attendance' => 'required|integer',
             'time_attendance' => 'required|string|max:255',
             'description' => 'required|string|max:255',
+            'user_id' => 'required'
         ]);
 
         $attendance->update([
@@ -90,6 +96,7 @@ class AttendanceController extends Controller
             'code_attendance' => $request->input('code_attendance'),
             'time_attendance' => $request->input('time_attendance'),
             'description' => $request->input('description'),
+            'user_id' => $request->input('user_id')
         ]);
 
         Session::flash('success', 'Asistencia actualizada exitosamente.');

@@ -3,7 +3,10 @@
 @section('contenido')
 
 <div class="py-6 px-8">
+
+    @can('ficha.store')
     <a href="#" class="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-lg mb-4" id="openModal">Agregar Ficha</a>
+    @endcan
 
     <!-- Modal -->
     <div class="fixed inset-0 z-50 flex items-center justify-center overflow-x-hidden overflow-y-auto outline-none focus:outline-none" id="myModal" style="display: none;">
@@ -54,6 +57,10 @@
                         Fecha finalización: {{ $ficha->date_end }}<br>
                         Programa de formación: {{ $ficha->program->name_program ?? 'No hay programa' }}
                     </p>
+                    @if(auth()->user()->hasAnyRole(['aprendiz', 'instructor']))
+                    <a href="{{ route('ficha.index_members', ['fichaId' => $ficha->id_ficha]) }}" class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-1 px-2 rounded">Visualizar integrantes</a>
+                    @endif
+                    @can('ficha.destroy')
                     <button class="bg-red-500 hover:bg-red-600 text-white font-semibold py-1 px-2 rounded form-delete" data-id="{{$ficha->id_ficha}}">
                         Eliminar
                     </button>
@@ -61,7 +68,9 @@
                         @csrf
                         @method('DELETE')
                     </form>
+                    @endcan
 
+                    @can('ficha.update')
                     <a href="javascript:void(0);"
                     class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-1 px-2 rounded"
                     onclick="editFicha({{ $ficha->id_ficha }})">
@@ -100,9 +109,13 @@
                             </div>
                         </div>
                     </div>
+                    @endcan
+                    @can('ficha.addAprendiz')
                     <button class="bg-green-500 hover:bg-green-600 text-white font-semibold py-1 px-2 rounded" onclick="openAddAprendizModal({{ $ficha->id_ficha }})">
                         Añadir aprendiz
                     </button>
+                    @endcan
+
                     <div class="fixed inset-0 z-50 flex items-center justify-center overflow-x-hidden overflow-y-auto outline-none focus:outline-none" id="addAprendizModal" style="display: none;">
                         <div class="relative w-auto my-6 mx-auto max-w-sm">
                             <div class="bg-white rounded-lg shadow-lg relative flex flex-col w-full p-6">
@@ -236,11 +249,11 @@
 
 <script>
     var addAprendizModal = document.getElementById("addAprendizModal");
- 
+
     function closeAddAprendizModal() {
         addAprendizModal.style.display = "none";
     }
- 
+
     function openAddAprendizModal(id_ficha) {
         addAprendizModal.style.display = "block";
 

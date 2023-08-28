@@ -19,10 +19,22 @@ class FichaController extends Controller
      */
     public function index()
     {
-        //
-        $fichas = Ficha::with('program')->get();
-        $programs = Program::all();
-        return view('home.ficha.index', compact('fichas' , 'programs'));
+        $user = auth()->user();
+        $programs = Program::all(); // Debes definir y obtener los programas aquí
+
+        if ($user->hasRole(['instructor', 'administrador'])) {
+            $fichas = Ficha::with('program')->get();
+        }
+        else if ($user->hasRole('aprendiz')) {
+            $fichas = Ficha::whereHas('members', function ($query) use ($user) {
+                $query->where('user_id', $user->id);
+            })->with('program')->get();
+        }
+        else {
+            $fichas = collect();
+        }
+
+        return view('home.ficha.index', compact('fichas', 'programs'));
     }
 
     /**

@@ -17,6 +17,8 @@ return new class extends Migration
             $table->string('name_attendance');
             $table->time('time_attendance');
             $table->string('description');
+            $table->unsignedBigInteger('user_id')->nullable();
+            $table->foreign('user_id')->references('id')->on('users');
             $table->timestamps();
         });
     }

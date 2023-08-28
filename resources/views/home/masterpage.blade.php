@@ -104,11 +104,14 @@
                     <span class="-mr-1 font-medium">Inicio</span>
                 </a>
 
+                @can('user.index')
                 <a href="{{ route('user.index') }}"
                     class="px-4 py-3 flex items-center space-x-4 rounded-md text-gray-500 group">
                     <i class="fas fa-users"></i>
                     <span>Usuarios</span>
                 </a>
+                @endcan
+
 
                 <a href="{{ route('ficha.index') }}"
                     class="px-4 py-3 flex items-center space-x-4 rounded-md text-gray-500 group">
@@ -116,11 +119,13 @@
                     <span>Fichas</span>
                 </a>
 
+
                 <a href="{{ route('program.index') }}"
                     class="px-4 py-3 flex items-center space-x-4 rounded-md text-gray-500 group">
                     <i class="fas fa-book"></i>
                     <span>Programas</span>
                 </a>
+
 
                 <a href="{{ route('timeTable.index') }}"
                     class="px-4 py-3 flex items-center space-x-4 rounded-md text-gray-500 group">
@@ -145,7 +150,6 @@
                     <i class="fas fa-check-circle text-green-500"></i>
                     <span>Asistencias</span>
                 </a>
-
             </div>
         </div>
 

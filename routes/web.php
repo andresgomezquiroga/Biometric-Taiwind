@@ -9,7 +9,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\ExcuseController;
 use App\Http\Controllers\CompetenceController;
 use App\Http\Controllers\AttendanceController;
-
+use App\Http\Controllers\RoleController;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,10 +19,14 @@ use App\Http\Controllers\AttendanceController;
 | Here is where you can register web routes for your application. These
 | routes are loaded by the RouteServiceProvider and all of them will
 | be assigned to the "web" middleware group. Make something great!
-|
+|.
 */
 
 Route::get('/', [AuthController::class, 'login'])->name('login');
+Route::get('/recoveryPassword', [AuthController::class, 'recoveryPassword'])->name('recoveryPassword');
+Route::post('/recoveryPassword', [AuthController::class, 'updatePassword'])->name('recoveryPassword');
+Route::get('showVerifyCode/{token}', [AuthController::class, 'showVerifyCode']);
+Route::post('verifyCode', [AuthController::class, 'verifyCode'])->name('verifyCode');
 Route::post('/auth', [AuthController::class, 'authenticate'])->name('auth');
 Route::post('/logout', [AuthController::class,  'logout'])->name('logout');
 
@@ -59,7 +63,8 @@ Route::middleware(['prevent', 'auth'])->group(function () {
     Route::delete('user/{user}', [UserController::class , 'destroy'])->name('user.destroy');
     Route::get('user/profile', [UserController::class , 'showProfile'])->name('user.profile');
     Route::put('/profile', [UserController::class, 'updateProfile'])->name('profile.update');
-    
+
+
 
     //excuse
     Route::get('excuse', [ExcuseController::class , 'index'])->name('excuse.index');
@@ -79,7 +84,6 @@ Route::middleware(['prevent', 'auth'])->group(function () {
     Route::post('attendance', [AttendanceController::class , 'store'])->name('attendance.store');
     Route::put('attendance/{attendance}', [AttendanceController::class , 'update'])->name('attendance.update');
     Route::delete('attendance/{attendance}', [AttendanceController::class , 'destroy'])->name('attendance.destroy');
-
 
 
 });

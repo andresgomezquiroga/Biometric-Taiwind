@@ -2,8 +2,11 @@
 
 @section('contenido')
     <div class="py-6 px-8">
+
+        @can('excuse.store')
         <button class="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-lg mb-4"
             id="openModal">Agregar Excusa</button>
+        @endcan
 
         <!-- Modal -->
         <div class="fixed inset-0 z-50 flex items-center justify-center overflow-x-hidden overflow-y-auto outline-none focus:outline-none"
@@ -61,10 +64,12 @@
                             class="py-2 px-4 bg-grey-lightest font-bold uppercase text-sm text-grey-light border-b border-grey-light text-center">
                             Comentarios</th>
 
+                        @can('excuse.destroy')
                         <th
                             class="py-2 px-4 bg-grey-lightest font-bold uppercase text-sm text-grey-light border-b border-grey-light text-center">
                             Acciones
                         </th>
+                        @endcan
 
 
                     </tr>
@@ -90,11 +95,14 @@
                             </td>
                             <td class="py-2 px-4 border-b border-grey-light text-center">{{ $excuse->comment }}</td>
                             <td class="py-2 px-4 border-b border-grey-light text-center">
+
+                            @can('excuse.update')
                             <a href="javascript:void(0);"
                                 class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-1 px-2 rounded"
                                 onclick="editUser({{ $excuse->id_excuse }})">
                                 Editar
                             </a>
+                            @endcan
 
                             <div class="fixed inset-0 z-50 flex items-center justify-center overflow-x-hidden overflow-y-auto outline-none focus:outline-none"
                                 id="editModal-{{ $excuse->id_excuse }}" style="display: none;">
@@ -117,7 +125,7 @@
                                             </div>
                                             <div class="flex flex-col">
                                                 <label for="comment">Comentarios</label>
-                                                <textarea value="{{ $excuse->comment }}" class="rounded-md p-2 border focus:border-green-500" 
+                                                <textarea value="{{ $excuse->comment }}" class="rounded-md p-2 border focus:border-green-500"
                                                     name="comment" id="comment" cols="30" rows="10"></textarea>
                                                 @error('comment')
                                                     <span class="text-red-500">{{ $message }}</span>
@@ -129,11 +137,15 @@
                                     </div>
                                 </div>
                             </div>
+
+                            @can('excuse.destroy')
                             <button
                                 class="bg-red-500 hover:bg-red-600 text-white font-semibold py-1 px-2 rounded form-delete"
                                 data-id="{{ $excuse->id_excuse }}">
                                 Eliminar
                             </button>
+                            @endcan
+
                             <form id="delete-form-{{ $excuse->id_excuse }}" action="{{ route('excuse.destroy', $excuse->id_excuse) }}"
                                 method="POST" style="display: none;">
                                 @csrf

@@ -2,8 +2,11 @@
 
 @section('contenido')
     <div class="py-6 px-8">
+
+        @can('competence.store')
         <button class="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-lg mb-4"
             id="openModal">Agregar Competencia</button>
+        @endcan
 
         <!-- Modal -->
         <div class="fixed inset-0 z-50 flex items-center justify-center overflow-x-hidden overflow-y-auto outline-none focus:outline-none"
@@ -70,10 +73,12 @@
                             class="py-2 px-4 bg-grey-lightest font-bold uppercase text-sm text-grey-light border-b border-grey-light text-center">
                             Descripcion de la competencia</th>
 
+                        @can('competence.destroy')
                         <th
                             class="py-2 px-4 bg-grey-lightest font-bold uppercase text-sm text-grey-light border-b border-grey-light text-center">
                             Acciones
                         </th>
+                        @endcan
 
 
                     </tr>
@@ -85,11 +90,14 @@
                             <td class="py-2 px-4 border-b border-grey-light text-center">{{ $competence->name_competence }}</td>
                             <td class="py-2 px-4 border-b border-grey-light text-center">{{ $competence->description }}</td>
                             <td class="py-2 px-4 border-b border-grey-light text-center">
+
+                            @can('competence.update')
                             <a href="javascript:void(0);"
                                 class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-1 px-2 rounded"
                                 onclick="editUser({{ $competence->id_competence }})">
                                 Editar
                             </a>
+                            @endcan
 
                             <div class="fixed inset-0 z-50 flex items-center justify-center overflow-x-hidden overflow-y-auto outline-none focus:outline-none"
                                 id="editModal-{{ $competence->id_competence }}" style="display: none;">
@@ -120,7 +128,7 @@
                                             </div>
                                             <div class="flex flex-col">
                                                 <label for="description">Descripcion</label>
-                                                <textarea value="{{ $competence->description }}" class="rounded-md p-2 border focus:border-green-500" 
+                                                <textarea value="{{ $competence->description }}" class="rounded-md p-2 border focus:border-green-500"
                                                     name="description" id="com" cols="30" rows="10"></textarea>
                                                 @error('comment')
                                                     <span class="text-red-500">{{ $message }}</span>
@@ -132,11 +140,15 @@
                                     </div>
                                 </div>
                             </div>
+
+                            @can('competence.destroy')
                             <button
                                 class="bg-red-500 hover:bg-red-600 text-white font-semibold py-1 px-2 rounded form-delete"
                                 data-id="{{ $competence->id_competence }}">
                                 Eliminar
                             </button>
+                            @endcan
+
                             <form id="delete-form-{{ $competence->id_competence }}" action="{{ route('competence.destroy', $competence->id_competence) }}"
                                 method="POST" style="display: none;">
                                 @csrf

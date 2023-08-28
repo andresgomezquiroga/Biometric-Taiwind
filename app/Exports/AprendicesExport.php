@@ -5,11 +5,9 @@ namespace App\Exports;
 use App\Models\Ficha;
 use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\WithHeadings;
-use Maatwebsite\Excel\Concerns\Exportable;
 
 class AprendicesExport implements FromQuery, WithHeadings
 {
-    use Exportable;
 
     protected $fichaId;
 
@@ -28,7 +26,8 @@ class AprendicesExport implements FromQuery, WithHeadings
     {
         return [
             'ID',
-            'Nombre y apellido',
+            'Nombre',
+            'Apellido',
             'Correo',
             'Edad',
             'Tipo de documento',

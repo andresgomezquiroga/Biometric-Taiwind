@@ -3,11 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use Illuminate\Contracts\Session\Session;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Storage;
+use Spatie\Permission\Models\Role;
+
 
 class UserController extends Controller
 {
@@ -17,7 +17,8 @@ class UserController extends Controller
     public function index()
     {
         $users = User::all();
-        return view('home.user.index', compact('users'));
+        $roles = Role::all();
+        return view('home.user.index', compact('users' , 'roles'));
     }
 
     /**
@@ -41,9 +42,10 @@ class UserController extends Controller
             'number_document' => 'required|integer|min:0',
             'email' => 'required|email',
             'password' => 'required|string',
+            'roles' => 'required|array',
         ]);
 
-        User::create([
+        $user = User::create([
             'name' => $request->input('name'),
             'last_name' => $request->input('last_name'),
             'email' => $request->input('email'),
@@ -53,8 +55,11 @@ class UserController extends Controller
             'password' => $request->input('password'),
         ]);
 
+        $selectedRoles = $request->input('roles', []);
+        $user->syncRoles($selectedRoles);
 
         return redirect()->route('user.index')->with('success', 'Usuario creado exitosamente.');
+
     }
 
     /**
@@ -81,6 +86,7 @@ class UserController extends Controller
             'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
             'email' => 'required|email',
             'password' => 'required|string',
+            'roles' => 'required|array'
         ]);
 
         // Procesar la imagen si se ha proporcionado
@@ -111,6 +117,10 @@ class UserController extends Controller
             'password' => bcrypt($request->input('password')), // Recuerda encriptar la contraseña
         ]);
 
+            // Actualizar roles del usuario
+            $selectedRoles = $request->input('roles', []);
+            $user->syncRoles($selectedRoles);
+
         return redirect()->route('user.index')->with('success', 'Usuario actualizado exitosamente.');
     }
 
@@ -128,6 +138,8 @@ class UserController extends Controller
                 unlink($rutaImagen);
             }
         }
+
+        $user->syncRoles([]);
 
         // Eliminar los datos del usuario
         $user->delete();
@@ -155,7 +167,7 @@ class UserController extends Controller
             'email' => 'required|email',
             'password' => 'required|string',
         ]);
-        
+
         $user = Auth::user();
 
         if ($request->hasFile('image')) {
@@ -187,4 +199,7 @@ class UserController extends Controller
 
         return redirect()->back()->with('profile_success', 'Perfil actualizado exitosamente.');
     }
+
+
+
 }

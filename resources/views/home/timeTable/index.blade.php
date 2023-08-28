@@ -2,8 +2,11 @@
 
 @section('contenido')
     <div class="py-6 px-8">
+
+        @can('timeTable.store')
         <button class="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-lg mb-4"
             id="openModal">Agregar horario</button>
+        @endcan
 
         <!-- Modal -->
         <div class="fixed inset-0 z-50 flex items-center justify-center overflow-x-hidden overflow-y-auto outline-none focus:outline-none"
@@ -85,11 +88,15 @@
                             <td class="py-2 px-4 border-b border-grey-light text-center">
                                 {{ $timeTable->ficha->number_ficha }}</td>
                             <td class="py-2 px-4 border-b border-grey-light text-right">
+
+                                @can('timeTable.update')
                                 <a href="javascript:void(0);"
                                     class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-1 px-2 rounded"
                                     onclick="editFicha({{ $timeTable->id_timeTable }})">
                                     Editar
                                 </a>
+                                @endcan
+
                                 <div class="fixed inset-0 z-50 flex items-center justify-center overflow-x-hidden overflow-y-auto outline-none focus:outline-none"
                                     id="editModal-{{ $timeTable->id_timeTable }}" style="display: none;">
                                     <div class="relative w-auto my-6 mx-auto max-w-sm">
@@ -144,10 +151,14 @@
                                         </div>
                                     </div>
                                 </div>
+
+                            @can('timeTable.destroy')
                             <button class="bg-red-500 hover:bg-red-600 text-white font-semibold py-1 px-2 rounded form-delete"
                                 data-id="{{ $timeTable->id_timeTable }}">
                                 Eliminar
                             </button>
+                            @endcan
+
                             <form id="delete-form-{{ $timeTable->id_timeTable }}"
                                 action="{{ route('timeTable.destroy', $timeTable->id_timeTable) }}" method="POST"
                                 style="display: none;">
@@ -195,18 +206,18 @@
                 const editModal = document.getElementById(`editModal-${id_timeTable}`);
                 const editForm = document.getElementById(`editForm-${id_timeTable}`);
                 const editUrl = `/timeTable/${id_timeTable}`;
-    
+
                 // Setear la acción del formulario y mostrar el modal
                 editForm.action = editUrl;
                 editModal.style.display = "block";
             }
-    
+
             function closeEditModal(id_timeTable) {
                 const editModal = document.getElementById(`editModal-${id_timeTable}`);
                 editModal.style.display = "none";
             }
         </script>
-    
+
 
     <script>
         $('.form-delete').click(function(e) {
