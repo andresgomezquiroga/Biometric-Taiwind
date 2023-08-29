@@ -98,7 +98,7 @@
             <!-- Items -->
             <div class="p-4 space-y-4">
                 <!-- Inicio -->
-                <a href="#" aria-label="dashboard"
+                <a href="{{route('home.homepage')}}" aria-label="dashboard"
                     class="relative px-4 py-3 flex items-center space-x-4 rounded-lg text-white bg-green-700">
                     <i class="fas fa-home text-black"></i>
                     <span class="-mr-1 font-medium">Inicio</span>

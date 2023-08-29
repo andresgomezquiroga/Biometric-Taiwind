@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
@@ -19,6 +20,12 @@ class UserController extends Controller
         $users = User::all();
         $roles = Role::all();
         return view('home.user.index', compact('users' , 'roles'));
+    }
+
+    public function homepage()
+    {
+        $roles = Role::all();
+        return view('home.homepage', compact('roles'));
     }
 
     /**

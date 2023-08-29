@@ -63,6 +63,7 @@ Route::middleware(['prevent', 'auth'])->group(function () {
     Route::delete('user/{user}', [UserController::class , 'destroy'])->name('user.destroy');
     Route::get('user/profile', [UserController::class , 'showProfile'])->name('user.profile');
     Route::put('/profile', [UserController::class, 'updateProfile'])->name('profile.update');
+    Route::get('/', [UserController::class, 'homepage'])->name('home.homepage');
 
 
 
