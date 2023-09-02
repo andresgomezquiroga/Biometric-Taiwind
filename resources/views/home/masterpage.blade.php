@@ -1,7 +1,7 @@
 @extends('template')
 
 
-@section('title', 'Panel administrativo')
+@section('title', 'RandiMetrico')
 
 @section('content')
 
