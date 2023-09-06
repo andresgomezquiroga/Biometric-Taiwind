@@ -17,8 +17,7 @@ class ProgramController extends Controller
     {
         $programs = Program::all();
         $users = User::all();
-        $instructs = User::role(['instructor'])->get();
-        return view('home.program.index', compact('programs', 'users', 'instructs'));
+        return view('home.program.index', compact('programs', 'users'));
     }
 
     /**
@@ -37,14 +36,12 @@ class ProgramController extends Controller
         $request->validate([
             'name_program' => 'required|string|max:255',
             'code_program' => 'required|integer|unique:programs',
-            'user_id' => 'required',
         ]);
 
 
         Program::create([
             'name_program' => $request->input('name_program'),
             'code_program' => $request->input('code_program'),
-            'user_id' => $request->input('user_id'),
         ]);
 
         Session::flash('success', 'Programa creado exitosamente.');
@@ -76,13 +73,11 @@ class ProgramController extends Controller
         $request->validate([
             'name_program' => 'required|string|max:255',
             'code_program' => 'required|integer',
-            'user_id' => 'required',
         ]);
     
         $program->update([
             'name_program' => $request->name_program,
             'code_program' => $request->code_program,
-            'user_id' => $request->user_id,
         ]);
     
         Session::flash('success', 'Programa actualizado exitosamente.');

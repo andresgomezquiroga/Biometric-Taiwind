@@ -10,6 +10,9 @@ use App\Http\Controllers\ExcuseController;
 use App\Http\Controllers\CompetenceController;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\QRController;
+
+
 
 /*
 |--------------------------------------------------------------------------
@@ -67,11 +70,14 @@ Route::middleware(['prevent', 'auth'])->group(function () {
 
 
 
+
     //excuse
     Route::get('excuse', [ExcuseController::class , 'index'])->name('excuse.index');
     Route::post('excuse', [ExcuseController::class , 'store'])->name('excuse.store');
     Route::put('excuse/{excuse}', [ExcuseController::class , 'update'])->name('excuse.update');
     Route::delete('excuse/{excuse}', [ExcuseController::class , 'destroy'])->name('excuse.destroy');
+    Route::post('/excuse/approve/{id}', [ExcuseController::class, 'approveExcuse'])->name('excuse.approve');
+    Route::post('/excuse/reject/{id}', [ExcuseController::class, 'rejectExcuse'])->name('excuse.reject');
 
     //competence
     Route::get('competence', [CompetenceController::class , 'index'])->name('competence.index');
@@ -85,6 +91,15 @@ Route::middleware(['prevent', 'auth'])->group(function () {
     Route::post('attendance', [AttendanceController::class , 'store'])->name('attendance.store');
     Route::put('attendance/{attendance}', [AttendanceController::class , 'update'])->name('attendance.update');
     Route::delete('attendance/{attendance}', [AttendanceController::class , 'destroy'])->name('attendance.destroy');
+    Route::post('/registrar-asistencia-qr', 'AttendanceController@registrarAsistenciaQR');
+
+
+    Route::get('generate-qr-code', [QRController::class , 'index'])->name('generateQRCode');
+
+
+    
+
+    
 
 
 });

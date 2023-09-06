@@ -48,4 +48,20 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function fichas()
+    {
+        return $this->belongsToMany(Ficha::class, 'members_fichas', 'user_id', 'ficha_id');
+    }
+
+    public function excuses()
+    {
+        return $this->hasMany(Excuse::class, 'user_id');
+    }
+
+    public function ficha()
+    {
+        return $this->belongsTo(Ficha::class, 'id_ficha', 'id');
+    }
+
 }

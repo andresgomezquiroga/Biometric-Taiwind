@@ -27,15 +27,6 @@
                             <input type="number" name="code_program" id="code_program"
                                 class="rounded-md p-2 border focus:border-green-500">
                         </div>
-                        <div class="flex flex-col">
-                            <label for="user_id">Instructores disponibles</label>
-                            <select name="user_id" id="user_id" class="rounded-md p-2 border focus:border-green-500">
-                                @foreach ($instructs as $instruct)
-                                    <option value="{{ $instruct->id }}">Nombre del instructor: {{ $instruct->name }}
-                                    </option>
-                                @endforeach
-                            </select>
-                        </div>
                         <button type="submit"
                             class="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-lg">Agregar</button>
                     </form>
@@ -63,9 +54,6 @@
                         <th
                             class="py-2 px-4 bg-grey-lightest font-bold uppercase text-sm text-grey-light border-b border-grey-light text-center">
                             Codigo del programa</th>
-                        <th
-                            class="py-2 px-4 bg-grey-lightest font-bold uppercase text-sm text-grey-light border-b border-grey-light text-center">
-                            Role asignado</th>
 
                         @can('program.update')
                             <th
@@ -81,9 +69,6 @@
                             <td class="py-2 px-4 border-b border-grey-light text-center">{{ $program->id_program }}</td>
                             <td class="py-2 px-4 border-b border-grey-light text-center">{{ $program->name_program }}</td>
                             <td class="py-2 px-4 border-b border-grey-light text-center">{{ $program->code_program }}</td>
-                            <td class="py-2 px-4 border-b border-grey-light text-center">
-                                {{ $program->user ? $program->user->name : 'Sin usuario asociado' }}
-                            </td>
                             <td class="py-2 px-4 border-b border-grey-light text-right">
 
                                 @can('program.update')
@@ -118,18 +103,6 @@
                                                     <input value="{{ $program->code_program }}" type="number"
                                                         name="code_program" id="code_program"
                                                         class="rounded-md p-2 border focus:border-green-500">
-                                                </div>
-                                                <div class="flex flex-col">
-                                                    <label for="user_id">Instructores disponibles</label>
-                                                    <select name="user_id" id="user_id"
-                                                        class="rounded-md p-2 border focus:border-green-500">
-                                                        @foreach ($instructs as $instructor)
-                                                            <option value="{{ $instructor->id }}"
-                                                                @if ($instructor->id === $program->user_id) selected @endif>
-                                                                Nombre del instructor: {{ $instructor->name }}
-                                                            </option>
-                                                        @endforeach
-                                                    </select>
                                                 </div>
                                                 <button typ"submit"
                                                     class="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-lg">Editar</button>

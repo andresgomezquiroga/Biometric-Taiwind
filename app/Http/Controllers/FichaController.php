@@ -148,14 +148,14 @@ class FichaController extends Controller
 
     public function index_Aprendiz(Request $request, $fichaId)
     {
-        $fichas = Ficha::findOrFail($fichaId);
-
-
-        // Obtener los integrantes de la ficha
-        $aprendizes = $fichas->members;
-
-        return view('home.ficha.index_members', compact('fichas','aprendizes'));
+        $ficha = Ficha::findOrFail($fichaId);
+    
+        // Cargar la relación members.user.roles
+        $ficha->load('members.roles');
+    
+        return view('home.ficha.index_members', compact('ficha'));
     }
+
 
     public function exportExcel($fichaId)
     {

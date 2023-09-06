@@ -6,6 +6,7 @@ use App\Models\timeTable;
 use Illuminate\Contracts\Session\Session;
 use Illuminate\Http\Request;
 use App\Models\Ficha;
+use Illuminate\Support\Facades\Auth;
 
 class TimeTableController extends Controller
 {
@@ -14,10 +15,22 @@ class TimeTableController extends Controller
      */
     public function index()
     {
-        //
-        $timeTables = timeTable::all();
-        $fichas = Ficha::all();
-        return view('home.timeTable.index', compact('timeTables', 'fichas'));
+        $user = Auth::user();
+        $instructors = [];
+    
+        if ($user->hasRole('administrador')) {
+            // Si es un administrador, obtén todos los horarios
+            $timeTables = timeTable::with(['ficha.instructors'])->get();
+            $fichas = Ficha::with('instructors')->get();
+        } elseif ($user->hasRole('instructor')) {
+            // Si es un instructor, obtén las fichas relacionadas con el instructor
+            $fichas = $user->fichas;
+    
+            // Obtén los horarios relacionados con esas fichas
+            $horarios = timeTable::whereIn('ficha_id', $fichas->pluck('id_ficha'))->with(['ficha.instructors'])->get();
+        }
+    
+        return view('home.timeTable.index', compact('timeTables', 'fichas', 'instructors'));
     }
 
     /**
@@ -37,6 +50,8 @@ class TimeTableController extends Controller
             'jornada' => 'required|in:Manana,Mixta,Noche',
             'time_start' => 'required|date_format:H:i', // Formato de tiempo en horas y minutos
             'time_end' => 'required|date_format:H:i',
+            'date_start' => 'required',
+            'date_end' => 'required',
             'ficha_id' => 'required',
         ]);
 
@@ -44,6 +59,8 @@ class TimeTableController extends Controller
             'jornada' => $request->input('jornada'),
             'time_start' => $request->input('time_start'),
             'time_end' => $request->input('time_end'),
+            'date_start' => $request->input('date_start'),
+            'date_end' => $request->input('date_end'),
             'ficha_id' => $request->input('ficha_id'),
         ]);
 
@@ -76,8 +93,10 @@ class TimeTableController extends Controller
 
         $request->validate([
             'jornada' => 'required|in:Manana,Mixta,Noche',
-            'time_start' => 'required|date_format:H:i',
+            'time_start' => 'required|date_format:H:i', // Formato de tiempo en horas y minutos
             'time_end' => 'required|date_format:H:i',
+            'date_start' => 'required',
+            'date_end' => 'required',
             'ficha_id' => 'required',
         ]);
 
@@ -85,6 +104,8 @@ class TimeTableController extends Controller
             'jornada' => $request->input('jornada'),
             'time_start' => $request->input('time_start'),
             'time_end' => $request->input('time_end'),
+            'date_start' => $request->input('date_start'),
+            'date_end' => $request->input('date_end'),
             'ficha_id' => $request->input('ficha_id'),
         ]);
 

@@ -15,6 +15,8 @@ class timeTable extends Model
         'jornada',
         'time_start',
         'time_end',
+        'date_start',
+        'date_end',
         'ficha_id',
     ];
 

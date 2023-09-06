@@ -11,11 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('programs', function (Blueprint $table) {
-            $table->id('id_program');
-            $table->string('name_program');
-            $table->integer('code_program');
-            $table->timestamps();
+        Schema::table('excuses', function (Blueprint $table) {
+            $table->string('status')->default('pendiente');
         });
     }
 
@@ -24,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('programs');
+        Schema::table('excuses', function (Blueprint $table) {
+            //
+        });
     }
 };

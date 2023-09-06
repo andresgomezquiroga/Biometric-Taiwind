@@ -11,9 +11,4 @@ class Program extends Model
     protected $primaryKey = 'id_program';
     protected $fillable = ['name_program', 'code_program', 'user_id'];
 
-
-    public function user()
-    {
-        return $this->belongsTo(User::class, 'user_id');
-    }
 }

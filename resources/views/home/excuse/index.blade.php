@@ -27,14 +27,28 @@
                                 <span class="text-red-500">{{ $message }}</span>
                             @enderror
                         </div>
+
+                        <div class="flex flex-col">
+                            <label for="date_excuse">Fecha de la inasistencia</label>
+                            <input type="date" name="date_excuse" id="date_excuse"
+                                class="rounded-md p-2 border focus:border-green-500">
+                            @error('date_excuse')
+                                <span class="text-red-500">{{ $message }}</span>
+                            @enderror
+                        </div>
+
                         <!-- Campo de comentarios -->
                         <div class="flex flex-col">
-                            <label for="comment">Comentarios</label>
+                            <label for="comment">Explicacion de la excusa</label>
                             <textarea name="comment" id="comment" cols="30" rows="10"
                                 class="rounded-md p-2 border focus:border-green-500"></textarea>
                             @error('comment')
                                 <span class="text-red-500">{{ $message }}</span>
                             @enderror
+                        </div>
+
+                        <div class="flex flex-col">
+                            <input type="hidden" name="status" value="pendiente">
                         </div>
                         <button type="submit"
                             class="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-lg">Agregar</button>
@@ -60,9 +74,18 @@
                         <th
                             class="py-2 px-4 bg-grey-lightest font-bold uppercase text-sm text-grey-light border-b border-grey-light text-center">
                             Archivo</th>
+
+                        <th class="py-2 px-4 bg-grey-lightest font-bold uppercase text-sm text-grey-light border-b border-grey-light text-center">
+                            Fecha de la inasistencia
+                        </th>
+
                         <th
                             class="py-2 px-4 bg-grey-lightest font-bold uppercase text-sm text-grey-light border-b border-grey-light text-center">
                             Comentarios</th>
+
+                        <th
+                            class="py-2 px-4 bg-grey-lightest font-bold uppercase text-sm text-grey-light border-b border-grey-light text-center">
+                            Estado</th>
 
                         @can('excuse.destroy')
                         <th
@@ -70,6 +93,10 @@
                             Acciones
                         </th>
                         @endcan
+
+                        <th class="py-2 px-4 bg-grey-lightest font-bold uppercase text-sm text-grey-light border-b border-grey-light text-center">
+                            Aceptar / Rechazar
+                        </th>
 
 
                     </tr>
@@ -93,7 +120,17 @@
                                     @endif
                                 </a>
                             </td>
+                            <td class="py-2 px-4 border-b border-grey-light text-center">{{ $excuse->date_excuse }}</td>
                             <td class="py-2 px-4 border-b border-grey-light text-center">{{ $excuse->comment }}</td>
+                            <td>
+                                @if ($excuse->status === 'pendiente')
+                                    Pendiente
+                                @elseif ($excuse->status === 'aprobada')
+                                    Aprobada
+                                @elseif ($excuse->status === 'rechazada')
+                                    Rechazada
+                                @endif
+                            </td>
                             <td class="py-2 px-4 border-b border-grey-light text-center">
 
                             @can('excuse.update')
@@ -120,6 +157,14 @@
                                                 <input value="{{ $excuse->archive }}" type="file" name="archive"
                                                     id="archive" class="rounded-md p-2 border focus:border-green-500">
                                                 @error('archive')
+                                                    <span class="text-red-500">{{ $message }}</span>
+                                                @enderror
+                                            </div>
+                                            <div class="flex flex-col">
+                                                <label for="date_excuse">Fecha de la insasistencia</label>
+                                                <input value="{{ $excuse->date_excuse }}" type="date" name="date_excuse"
+                                                    id="date_excuse" class="rounded-md p-2 border focus:border-green-500">
+                                                @error('date_excuse')
                                                     <span class="text-red-500">{{ $message }}</span>
                                                 @enderror
                                             </div>
@@ -151,6 +196,22 @@
                                 @csrf
                                 @method('DELETE')
                             </form>
+                            </td>
+
+                            <td>
+                                <!-- Botones de acción -->
+                                @if (auth()->user()->hasRole(['instructor', 'administrador']))
+                                    @if ($excuse->status === 'pendiente')
+                                        <form action="{{ route('excuse.approve', $excuse->id_excuse) }}" method="POST" style="display: inline">
+                                            @csrf
+                                            <button type="submit" class="bg-green-500 hover:bg-green-600 text-white font-semibold py-1 px-2 rounded">Aprobar</button>
+                                        </form>
+                                        <form action="{{ route('excuse.reject', $excuse->id_excuse) }}" method="POST" style="display: inline">
+                                            @csrf
+                                            <button type="submit" class="bg-red-500 hover:bg-red-600 text-white font-semibold py-1 px-2 rounded">Rechazar</button>
+                                        </form>
+                                    @endif
+                                @endif
                             </td>
 
                         </tr>

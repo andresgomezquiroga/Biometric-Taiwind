@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Excuse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+
+
 
 
 class ExcuseController extends Controller
@@ -13,11 +16,16 @@ class ExcuseController extends Controller
      */
     public function index()
     {
-        //
-
-        $excuses = Excuse::all();
+        $user = Auth::user();
+        $excuses = [];
+    
+        if ($user->hasRole('administrador') || $user->hasRole('instructor')) {
+            $excuses = Excuse::all();
+        } elseif ($user->hasRole('aprendiz')) {
+            $excuses = $user->excuses()->get();
+        }
+    
         return view('home.excuse.index', compact('excuses'));
-
     }
 
     /**
@@ -36,14 +44,16 @@ class ExcuseController extends Controller
         $request->validate([
             'comment' => 'required|string|max:255',
             'archive' => 'required|file|mimes:pdf,docx,jpg,jpeg,png',
+            'date_excuse' => 'required'
         ]);
     
         // Subir el archivo al sistema de archivos (por ejemplo, almacenamiento público)
         $archivePath = $request->file('archive')->store('excuse_files', 'public');
-    
-        Excuse::create([
+        $user = Auth::user();
+        $user->excuses()->create([
             'comment' => $request->input('comment'),
             'archive' => $archivePath,
+            'date_excuse' => $request->input('date_excuse'),
         ]);
     
         session()->flash('success', 'Excusa creada exitosamente.');
@@ -76,6 +86,7 @@ class ExcuseController extends Controller
         $request->validate([
             'comment' => 'required|string|max:255',
             'archive' => 'required|file|mimes:pdf,docx,jpg,jpeg,png',
+            'date_excuse' => 'required'
         ]);
         
         $archivePath = $request->file('archive')->store('excuse_files', 'public');
@@ -83,6 +94,7 @@ class ExcuseController extends Controller
         $excuse->update([
             'comment' => $request->input('comment'),
             'archive' => $archivePath,
+            'date_excuse' => $request->input('date_excuse'),
         ]);
 
         session()->flash('success', 'Excusa actualizada exitosamente.');
@@ -100,5 +112,23 @@ class ExcuseController extends Controller
 
         session()->flash('delete', 'ok');
         return redirect()->route('excuse.index');
+    }
+
+    public function approveExcuse($id)
+    {
+        $excuse = Excuse::findOrFail($id);
+        $excuse->status = 'aprobada';
+        $excuse->save();
+    
+        return redirect()->back()->with('success', 'Excusa aprobada exitosamente');
+    }
+    
+    public function rejectExcuse($id)
+    {
+        $excuse = Excuse::findOrFail($id);
+        $excuse->status = 'rechazada';
+        $excuse->save();
+    
+        return redirect()->back()->with('success', 'Excusa rechazada exitosamente');
     }
 }

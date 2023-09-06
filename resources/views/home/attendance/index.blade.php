@@ -7,6 +7,14 @@
         <button class="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-lg mb-4"
             id="openModal">Agregar Asistencia</button>
         @endcan
+        <div class="flex flex-col">
+            <h1>Escanea el código QR para registrar la asistencia</h1>
+            <button id="startScanner" class="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-lg">Iniciar Escáner</button>
+            <div class="bg-black rounded-lg overflow-hidden aspect-w-16 aspect-h-9">
+                <video id="preview" class="w-full h-full" style="display: none;"></video>
+            </div>
+        </div>
+        
 
         <!-- Modal -->
         <div class="fixed inset-0 z-50 flex items-center justify-center overflow-x-hidden overflow-y-auto outline-none focus:outline-none"
@@ -222,6 +230,8 @@
     @endsection
 
     @section('js')
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://rawgit.com/schmich/instascan-builds/master/instascan.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 
@@ -315,4 +325,40 @@
                 }
             }
         </script>
+
+<script>
+    var scanner = new Instascan.Scanner({ video: document.getElementById('preview') });
+
+    document.getElementById('startScanner').addEventListener('click', function () {
+        // Muestra el video cuando se hace clic en el botón
+        document.getElementById('preview').style.display = 'block';
+
+        Instascan.Camera.getCameras().then(function (cameras) {
+            if (cameras.length > 0) {
+                scanner.start(cameras[0]);
+
+                scanner.addListener('scan', function (content) {
+                    // Content contiene los datos del código QR escaneado
+                    // Realiza una solicitud Ajax para registrar la asistencia
+                    $.ajax({
+                        type: "POST",
+                        url: "/registrar-asistencia-qr", // Ruta de Laravel para registrar asistencia desde QR
+                        data: { qrData: content },
+                        success: function (response) {
+                            alert(response.message);
+                        },
+                        error: function (error) {
+                            console.error(error);
+                        }
+                    });
+                });
+            } else {
+                alert('No se encontraron cámaras disponibles.');
+            }
+        }).catch(function (error) {
+            console.error(error);
+        });
+    });
+</script>
+
     @endsection
