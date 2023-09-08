@@ -16,9 +16,7 @@ return new class extends Migration
             $table->string('code_attendance');
             $table->string('name_attendance');
             $table->time('time_attendance');
-            $table->string('description');
-            $table->unsignedBigInteger('user_id')->nullable();
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->string('apprentices_assisted')->nullable();
             $table->timestamps();
         });
     }

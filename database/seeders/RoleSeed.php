@@ -20,48 +20,48 @@ class RoleSeed extends Seeder
         $aprendiz = Role::create(['name' => 'aprendiz']);
 
 
-        Permission::create(['name' => 'program.index']);
-        Permission::create(['name' => 'program.store']);
-        Permission::create(['name' => 'program.update']);
-        Permission::create(['name' => 'program.destroy']);
+        Permission::create(['name' => 'program.index']);/*1*/
+        Permission::create(['name' => 'program.store']);/*2*/
+        Permission::create(['name' => 'program.update']);/*3*/
+        Permission::create(['name' => 'program.destroy']);/*4*/
 
-        Permission::create(['name' => 'ficha.index']);
-        Permission::create(['name' => 'ficha.store']);
-        Permission::create(['name' => 'ficha.update']);
-        Permission::create(['name' => 'ficha.destroy']);
-        Permission::create(['name' => 'ficha.addAprendiz']);
-        Permission::create(['name' => 'ficha.index_members']);
-        Permission::create(['name' => 'ficha.export.excel']);
+        Permission::create(['name' => 'ficha.index']);/*5*/
+        Permission::create(['name' => 'ficha.store']);/*6*/
+        Permission::create(['name' => 'ficha.update']);/*7*/
+        Permission::create(['name' => 'ficha.destroy']);/*8*/
+        Permission::create(['name' => 'ficha.addAprendiz']);/*9*/
+        Permission::create(['name' => 'ficha.index_members']);/*10*/
+        Permission::create(['name' => 'ficha.export.excel']);/*11*/
 
-        Permission::create(['name' => 'timeTable.index']);
-        Permission::create(['name' => 'timeTable.store']);
-        Permission::create(['name' => 'timeTable.update']);
-        Permission::create(['name' => 'timeTable.destroy']);
-
-
-        Permission::create(['name' => 'user.index']);
-        Permission::create(['name' => 'user.store']);
-        Permission::create(['name' => 'user.update']);
-        Permission::create(['name' => 'user.destroy']);
-        Permission::create(['name' => 'user.profile']);
-        Permission::create(['name' => 'profile.update']);
-
-        Permission::create(['name' => 'excuse.index']);
-        Permission::create(['name' => 'excuse.store']);
-        Permission::create(['name' => 'excuse.update']);
-        Permission::create(['name' => 'excuse.destroy']);
+        Permission::create(['name' => 'timeTable.index']);/*12*/
+        Permission::create(['name' => 'timeTable.store']);/*13*/
+        Permission::create(['name' => 'timeTable.update']);/*14*/
+        Permission::create(['name' => 'timeTable.destroy']);/*15*/
 
 
-        Permission::create(['name' => 'competence.index']);
-        Permission::create(['name' => 'competence.store']);
-        Permission::create(['name' => 'competence.update']);
-        Permission::create(['name' => 'competence.destroy']);
+        Permission::create(['name' => 'user.index']);/*16*/
+        Permission::create(['name' => 'user.store']);/*17*/
+        Permission::create(['name' => 'user.update']);/*18*/
+        Permission::create(['name' => 'user.destroy']);/*19*/
+        Permission::create(['name' => 'user.profile']);/*20*/
+        Permission::create(['name' => 'profile.update']);/*21*/
+
+        Permission::create(['name' => 'excuse.index']);/*22*/
+        Permission::create(['name' => 'excuse.store']);/*23*/
+        Permission::create(['name' => 'excuse.update']);/*24*/
+        Permission::create(['name' => 'excuse.destroy']);/*25*/
 
 
-        Permission::create(['name' => 'attendance.index']);
-        Permission::create(['name' => 'attendance.store']);
-        Permission::create(['name' => 'attendance.update']);
-        Permission::create(['name' => 'attendance.destroy']);
+        Permission::create(['name' => 'competence.index']);/*26*/
+        Permission::create(['name' => 'competence.store']);/*27*/
+        Permission::create(['name' => 'competence.update']);/*28*/
+        Permission::create(['name' => 'competence.destroy']);/*29*/
+
+
+        Permission::create(['name' => 'attendance.index']);/*30*/
+        Permission::create(['name' => 'attendance.store']);/*31*/
+        Permission::create(['name' => 'attendance.update']);/*32*/
+        Permission::create(['name' => 'attendance.destroy']);/*33*/
 
 
         $admin->permissions()->attach([
@@ -71,11 +71,11 @@ class RoleSeed extends Seeder
         ]);
 
         $instruct->permissions()->attach([
-            1,5,11,12,20,22,26,30
+            5,11,12,20,22,26,30
         ]);
 
         $aprendiz->permissions()->attach([
-            1, 5, 12, 21, 22, 23, 30
+            5, 12, 21, 22, 23
         ]);
 
     }

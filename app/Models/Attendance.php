@@ -10,11 +10,10 @@ class Attendance extends Model
     use HasFactory;
 
     protected $fillable = [
-        'name_attendance',
         'code_attendance',
+        'name_attendance',
         'time_attendance',
-        'description',
-        'aprendiz',
+        'apprentices_assisted'
     ];
 
     protected $primaryKey = 'id_attendance';
@@ -25,5 +24,5 @@ class Attendance extends Model
     ];
 
 
-    
+
 }

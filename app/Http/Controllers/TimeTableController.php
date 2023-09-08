@@ -17,7 +17,9 @@ class TimeTableController extends Controller
     {
         $user = Auth::user();
         $instructors = [];
-    
+        $timeTables = [];
+        $fichas = []; // Define la variable $fichas como un array vacío por defecto
+
         if ($user->hasRole('administrador')) {
             // Si es un administrador, obtén todos los horarios
             $timeTables = timeTable::with(['ficha.instructors'])->get();
@@ -25,11 +27,10 @@ class TimeTableController extends Controller
         } elseif ($user->hasRole('instructor')) {
             // Si es un instructor, obtén las fichas relacionadas con el instructor
             $fichas = $user->fichas;
-    
             // Obtén los horarios relacionados con esas fichas
             $horarios = timeTable::whereIn('ficha_id', $fichas->pluck('id_ficha'))->with(['ficha.instructors'])->get();
         }
-    
+
         return view('home.timeTable.index', compact('timeTables', 'fichas', 'instructors'));
     }
 

@@ -115,12 +115,12 @@
                     <input class="" type="file" name="image" id="image">
                 </div>
 
-                <div class="ml-auto">
-                    <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                <div class="ml-auto flex">
+                    <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2"
                         type="submit">Actualizar</button>
-                </div>
-                <div class="ml-auto">
+                    @if (auth()->user()->hasRole('aprendiz'))
                     <a href="{{ route('generateQRCode') }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Visualizar código QR</a>
+                    @endif
                 </div>
 
             </form>

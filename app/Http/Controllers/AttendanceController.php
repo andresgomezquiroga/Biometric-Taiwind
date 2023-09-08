@@ -18,9 +18,7 @@ class AttendanceController extends Controller
         //
 
         $attendances = Attendance::all();
-        $users = User::all();
-        $aprendices = User::role(['aprendiz'])->get();
-        return view('home.attendance.index', compact('attendances', 'aprendices'));
+        return view('home.attendance.index', compact('attendances'));
     }
 
     /**
@@ -42,8 +40,7 @@ class AttendanceController extends Controller
             'name_attendance' => 'required|string|max:255',
             'code_attendance' => 'required|integer|unique:attendances',
             'time_attendance' => 'required|string|max:255',
-            'description' => 'required|string|max:255',
-            'user_id' => 'required'
+            'apprentices_assisted' => 'required',
 
         ]);
 
@@ -51,8 +48,7 @@ class AttendanceController extends Controller
             'name_attendance' => $request->input('name_attendance'),
             'code_attendance' => $request->input('code_attendance'),
             'time_attendance' => $request->input('time_attendance'),
-            'description' => $request->input('description'),
-            'user_id' => $request->input('user_id')
+            'apprentices_assisted' => $request->input('apprentices_assisted'),
         ]);
 
         Session::flash('success', 'Asistencia creada exitosamente.');
@@ -88,16 +84,14 @@ class AttendanceController extends Controller
             'name_attendance' => 'required|string|max:255',
             'code_attendance' => 'required|integer',
             'time_attendance' => 'required|string|max:255',
-            'description' => 'required|string|max:255',
-            'user_id' => 'required'
+            'apprentices_assisted' => 'required',
         ]);
 
         $attendance->update([
             'name_attendance' => $request->input('name_attendance'),
             'code_attendance' => $request->input('code_attendance'),
             'time_attendance' => $request->input('time_attendance'),
-            'description' => $request->input('description'),
-            'user_id' => $request->input('user_id')
+            'apprentices_assisted' => $request->input('apprentices_assisted'),
         ]);
 
         Session::flash('success', 'Asistencia actualizada exitosamente.');
@@ -119,45 +113,4 @@ class AttendanceController extends Controller
         return redirect()->route('attendance.index');
     }
 
-    public function registrarAsistenciaQR(Request $request)
-    {
-        // Obtener el contenido del código QR desde la solicitud
-        $qrData = $request->input('qrData'); // Supongamos que es una cadena JSON
-
-        try {
-            // Decodificar la cadena JSON del código QR
-            $qrData = json_decode($qrData, true);
-
-            if ($qrData === null) {
-                // La cadena JSON es inválida
-                return response()->json(['message' => 'Contenido de código QR inválido'], 400);
-            }
-
-            // Obtener el ID del usuario aprendiz desde el código QR
-            $userId = $qrData['user_id'];
-
-            // Verificar si el usuario aprendiz existe
-            $user = User::find($userId);
-
-            if (!$user) {
-                return response()->json(['message' => 'Usuario aprendiz no encontrado'], 404);
-            }
-
-            // Aquí puedes realizar más validaciones según tus requisitos.
-
-            // Registra la asistencia
-            $attendance = new Attendance();
-            $attendance->name_attendance = 'Asistido'; // Nombre fijo para asistencia
-            $attendance->code_attendance = rand(1000, 9999); // Código aleatorio (puedes cambiarlo según necesites)
-            $attendance->time_attendance = now()->toTimeString(); // Hora actual
-            $attendance->description = 'Descripción de la asistencia'; // Descripción fija o puedes usar la de $qrData
-            $attendance->user_id = $user->id; // ID del usuario aprendiz
-
-            $attendance->save();
-
-            return response()->json(['message' => 'Asistencia registrada con éxito']);
-        } catch (Exception $e) {
-            return response()->json(['message' => 'Error al registrar asistencia'], 500);
-        }
-    }
 }

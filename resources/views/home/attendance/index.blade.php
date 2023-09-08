@@ -1,20 +1,28 @@
 @extends('home.masterpage')
 
 @section('contenido')
-    <div class="py-6 px-8">
+ <div class="py-6 px-8">
+     <div class="flex justify-between items-center mb-4">
+         @can('attendance.store')
+             <button class="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-lg"
+                 id="openModal">Agregar Asistencia</button>
+         @endcan
+         @if (auth()->user()->hasRole('instructor'))
+         <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" id="startScanner">
+            Escanear Código QR
+        </button>
+         @endif
+     </div>
+     <div class="container mx-auto mt-8 p-4">
+         <div class="relative max-w-xs mx-auto mb-4">
+             <!-- Contenedor del video de la cámara -->
+             <div class="bg-black rounded-lg overflow-hidden aspect-w-16 aspect-h-9">
+                 <video id="preview" class="w-full h-full" style="display: none;"></video>
+             </div>
+         </div>
+     </div>
 
-        @can('attendance.store')
-        <button class="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-lg mb-4"
-            id="openModal">Agregar Asistencia</button>
-        @endcan
-        <div class="flex flex-col">
-            <h1>Escanea el código QR para registrar la asistencia</h1>
-            <button id="startScanner" class="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-lg">Iniciar Escáner</button>
-            <div class="bg-black rounded-lg overflow-hidden aspect-w-16 aspect-h-9">
-                <video id="preview" class="w-full h-full" style="display: none;"></video>
-            </div>
-        </div>
-        
+
 
         <!-- Modal -->
         <div class="fixed inset-0 z-50 flex items-center justify-center overflow-x-hidden overflow-y-auto outline-none focus:outline-none"
@@ -53,20 +61,10 @@
                             @enderror
                         </div>
                         <div class="flex flex-col">
-                            <label for="user_id">Aprendices</label>
-                            <select name="user_id" id="user_id" class="rounded-md p-2 border focus:border-green-500">
-                                @foreach ($aprendices as $aprendice)
-                                    <option value="{{ $aprendice->id }}">Nombre completo: {{ $aprendice->name }} {{$aprendice->last_name}}
-                                    </option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <!-- Campo de comentarios -->
-                        <div class="flex flex-col">
-                            <label for="description">Descripcion de la asistencia</label>
-                            <textarea name="description" id="description" cols="30" rows="10"
-                                class="rounded-md p-2 border focus:border-green-500"></textarea>
-                            @error('description')
+                            <label for="apprentices_assisted">Ingrese el nombre de los asistentes</label>
+                            <input type="text" name="apprentices_assisted" id="apprentices_assisted"
+                                class="rounded-md p-2 border focus:border-green-500">
+                            @error('apprentices_assisted')
                                 <span class="text-red-500">{{ $message }}</span>
                             @enderror
                         </div>
@@ -103,9 +101,6 @@
                             class="py-2 px-4 bg-grey-lightest font-bold uppercase text-sm text-grey-light border-b border-grey-light text-center">
                             Aprendices con sus asistencias</th>
 
-                        <th
-                            class="py-2 px-4 bg-grey-lightest font-bold uppercase text-sm text-grey-light border-b border-grey-light text-center">
-                            Descripcion</th>
 
                         @can('attendance.destroy')
                         <th
@@ -123,8 +118,7 @@
                             <td class="py-2 px-4 border-b border-grey-light text-center">{{ $attendance->code_attendance }}</td>
                             <td class="py-2 px-4 border-b border-grey-light text-center">{{ $attendance->name_attendance }}</td>
                             <td class="py-2 px-4 border-b border-grey-light text-center">{{ $attendance->time_attendance }}</td>
-                            <td class="py-2 px-4 border-b border-grey-light text-center">{{$attendance->user->name}} {{$attendance->user->last_name}}</td>
-                            <td class="py-2 px-4 border-b border-grey-light text-center">{{ $attendance->description }}</td>
+                            <td class="py-2 px-4 border-b border-grey-light text-center">{{ $attendance->apprentices_assisted }}</td>
                             <td class="py-2 px-4 border-b border-grey-light text-center">
 
                             @can('attendance.update')
@@ -173,26 +167,11 @@
                                             </div>
 
                                             <div class="flex flex-col">
-                                                <label for="user_id">Instructores disponibles</label>
-                                                <select name="user_id" id="user_id"
+                                                <label for="apprentices_assisted">Ingrese el nombre de los asistentes</label>
+                                                <input value="{{ $attendance->apprentices_assisted }}" type="text"
+                                                    name="apprentices_assisted" id="apprentices_ assisted"
                                                     class="rounded-md p-2 border focus:border-green-500">
-                                                    @foreach ($aprendices as $aprendice)
-                                                        <option value="{{ $aprendice->id }}"
-                                                            @if ($aprendice->id === $attendance->user_id) selected @endif>
-                                                            Nombre completo: {{ $aprendice->name }}
-                                                        </option>
-                                                    @endforeach
-                                                </select>
-                                                @error('user_id')
-                                                <span class="text-red-500">{{ $message }}</span>
-                                                @enderror
-                                            </div>
-
-                                            <div class="flex flex-col">
-                                                <label for="description">Descripcion de la asistencia</label>
-                                                <textarea value="{{ $attendance->description }}" class="rounded-md p-2 border focus:border-green-500"
-                                                    name="description" id="com" cols="30" rows="10"></textarea>
-                                                @error('description')
+                                                @error('apprentices_assisted')
                                                     <span class="text-red-500">{{ $message }}</span>
                                                 @enderror
                                             </div>
@@ -326,6 +305,7 @@
             }
         </script>
 
+
 <script>
     var scanner = new Instascan.Scanner({ video: document.getElementById('preview') });
 
@@ -341,14 +321,37 @@
                     // Content contiene los datos del código QR escaneado
                     // Realiza una solicitud Ajax para registrar la asistencia
                     $.ajax({
-                        type: "POST",
-                        url: "/registrar-asistencia-qr", // Ruta de Laravel para registrar asistencia desde QR
-                        data: { qrData: content },
-                        success: function (response) {
-                            alert(response.message);
+                        method: "POST",
+                        url: "{{ route('storeCodigoQr') }}",
+                        data: {
+                            _token: "{{ csrf_token() }}",
+                            qr_data: content
                         },
-                        error: function (error) {
-                            console.error(error);
+                        success: function(response) {
+                            console.log(response);
+                            if (response == "si") {
+                                Swal.fire(
+                                    '¡Éxito!',
+                                    'La asistencia se creó correctamente.',
+                                    'success'
+                                ).then(function() {
+                                    location.reload(); // Refresca la página después de mostrar el mensaje
+                                });
+                            } else {
+                                Swal.fire(
+                                    'Error',
+                                    'Hubo un error al crear la asistencia.',
+                                    'error'
+                                );
+                            }
+                        },
+                        error: function(jqXHR, textStatus, errorThrown) {
+                            console.log(textStatus, errorThrown);
+                            Swal.fire(
+                                'Error',
+                                'Hubo un error al crear la asistencia.',
+                                'error'
+                            );
                         }
                     });
                 });
@@ -360,5 +363,4 @@
         });
     });
 </script>
-
     @endsection

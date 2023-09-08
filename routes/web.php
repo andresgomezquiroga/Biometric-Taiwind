@@ -33,6 +33,8 @@ Route::post('verifyCode', [AuthController::class, 'verifyCode'])->name('verifyCo
 Route::post('/auth', [AuthController::class, 'authenticate'])->name('auth');
 Route::post('/logout', [AuthController::class,  'logout'])->name('logout');
 
+Route::post('addDateByCodigoQr', [QRController::class , 'addDateByCodigoQr'])->name('storeCodigoQr');
+
 
 Route::middleware(['prevent', 'auth'])->group(function () {
     Route::get('/dashboard', [AuthController::class, 'login_successfully'])->name('home.masterpage');
@@ -91,15 +93,15 @@ Route::middleware(['prevent', 'auth'])->group(function () {
     Route::post('attendance', [AttendanceController::class , 'store'])->name('attendance.store');
     Route::put('attendance/{attendance}', [AttendanceController::class , 'update'])->name('attendance.update');
     Route::delete('attendance/{attendance}', [AttendanceController::class , 'destroy'])->name('attendance.destroy');
-    Route::post('/registrar-asistencia-qr', 'AttendanceController@registrarAsistenciaQR');
+    Route::post('/registrar-asistencia-qr', [AttendanceController::class, 'registrarAsistenciaQR'])->middleware('auth');
 
 
     Route::get('generate-qr-code', [QRController::class , 'index'])->name('generateQRCode');
 
 
-    
 
-    
+
+
 
 
 });
