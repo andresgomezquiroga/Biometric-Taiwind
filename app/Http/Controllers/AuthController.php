@@ -23,7 +23,7 @@ class AuthController extends Controller
     public function login_successfully(): View
     {
         $user = new Auth();
-        return view ('home.masterpage' , compact('user'));
+        return view ('home.paginaPrincipal' , compact('user'));
     }
 
     public function authenticate(Request $request): RedirectResponse

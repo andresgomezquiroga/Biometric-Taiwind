@@ -16,7 +16,7 @@ class CompetenceController extends Controller
         //
 
         $competences = Competence::all();
-        return view('home.competence.index', compact('competences'));
+        return view('home.competencias.index', compact('competences'));
     }
 
     /**

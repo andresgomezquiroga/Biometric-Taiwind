@@ -25,7 +25,7 @@ class ExcuseController extends Controller
             $excuses = $user->excuses()->get();
         }
     
-        return view('home.excuse.index', compact('excuses'));
+        return view('home.excusas.index', compact('excuses'));
     }
 
     /**

@@ -31,7 +31,7 @@ class TimeTableController extends Controller
             $horarios = timeTable::whereIn('ficha_id', $fichas->pluck('id_ficha'))->with(['ficha.instructors'])->get();
         }
 
-        return view('home.timeTable.index', compact('timeTables', 'fichas', 'instructors'));
+        return view('home.Horarios.index', compact('timeTables', 'fichas', 'instructors'));
     }
 
     /**

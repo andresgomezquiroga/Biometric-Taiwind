@@ -14,7 +14,7 @@ class QRController extends Controller
     public function index()
     {
         $user = auth()->user(); // Obtener el usuario autenticado
-        return view('qr.generate', compact('user'));
+        return view('generar_codigo_qr.generate', compact('user'));
     }
 
     public function addDateByCodigoQr(Request $request)

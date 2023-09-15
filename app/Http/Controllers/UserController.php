@@ -19,7 +19,7 @@ class UserController extends Controller
     {
         $users = User::all();
         $roles = Role::all();
-        return view('home.user.index', compact('users' , 'roles'));
+        return view('home.usuarios.index', compact('users' , 'roles'));
     }
 
     public function homepage()
