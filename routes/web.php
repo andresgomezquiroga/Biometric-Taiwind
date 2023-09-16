@@ -52,7 +52,7 @@ Route::middleware(['prevent', 'auth'])->group(function () {
     Route::delete('ficha/{ficha}', [FichaController::class, 'destroy'])->name('ficha.destroy');
     Route::post('ficha/addAprendiz', [FichaController::class, 'addAprendiz'])->name('ficha.addAprendiz');
     Route::get('/members_list/{fichaId}', [FichaController::class, 'index_Aprendiz'])->name('ficha.index_members');
-    Route::get('ficha/{ficha}/export-excel', [FichaController::class, 'exportExcel'])->name('ficha.export.excel');
+
 
     //Horarios
     Route::get('timeTable', [TimeTableController::class, 'index'])->name('timeTable.index');

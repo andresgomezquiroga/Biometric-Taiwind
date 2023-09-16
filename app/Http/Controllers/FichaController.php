@@ -157,9 +157,5 @@ class FichaController extends Controller
     }
 
 
-    public function exportExcel($fichaId)
-    {
-        return Excel::download(new AprendicesExport($fichaId), 'aprendices.xlsx');
-    }
 
 }

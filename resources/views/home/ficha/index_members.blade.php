@@ -67,10 +67,6 @@
 
                 </tbody>
             </table>
-            <a href="{{ route('ficha.export.excel', ['ficha' => $ficha->id_ficha]) }}"
-                class="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-lg mt-4">
-                 Descargar Excel
-             </a>
         </div>
     @endsection
 </div>
