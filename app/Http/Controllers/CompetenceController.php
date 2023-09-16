@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Competence;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
+use App\Models\Ficha;
 
 class CompetenceController extends Controller
 {
@@ -15,8 +16,11 @@ class CompetenceController extends Controller
     {
         //
 
-        $competences = Competence::all();
-        return view('home.competencias.index', compact('competences'));
+        
+
+        $competences = Competence::with('ficha')->get();
+        $fichas = Ficha::all();
+        return view('home.competencias.index', compact('competences', 'fichas'));
     }
 
     /**
@@ -38,12 +42,14 @@ class CompetenceController extends Controller
             'name_competence' => 'required|string|max:255',
             'code_competence' => 'required|integer|unique:competences',
             'description' => 'required|string|max:255',
+            'ficha_id' => 'required',
         ]);
 
         Competence::create([
             'name_competence' => $request->input('name_competence'),
             'code_competence' => $request->input('code_competence'),
             'description' => $request->input('description'),
+            'ficha_id' => $request->input('ficha_id'),
         ]);
 
         Session::flash('success', 'Competencia creada exitosamente.');
@@ -78,12 +84,14 @@ class CompetenceController extends Controller
             'name_competence' => 'required|string|max:255',
             'code_competence' => 'required|integer',
             'description' => 'required|string|max:255',
+            'ficha_id' => 'required',
         ]);
         
         $competence->update([
             'name_competence' => $request->input('name_competence'),
             'code_competence' => $request->input('code_competence'),
             'description' => $request->input('description'),
+            'ficha_id' => $request->input('ficha_id'),
         ]);
         
         Session::flash('success', 'Competencia actualizada exitosamente.');

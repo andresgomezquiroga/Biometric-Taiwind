@@ -23,11 +23,4 @@ class Ficha extends Model
         return $this->belongsToMany(User::class, 'members_fichas', 'ficha_id', 'user_id');
     }
 
-    public function instructors()
-    {
-        return $this->belongsToMany(User::class, 'members_fichas', 'ficha_id', 'user_id')
-            ->whereHas('roles', function ($query) {
-                $query->where('name', 'Instructor');
-            });
-    }
 }

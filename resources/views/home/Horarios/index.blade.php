@@ -23,43 +23,53 @@
                             <option value="Mixta" {{ old('jornada') == 'Mixta' ? 'selected' : '' }}>Mixta</option>
                             <option value="Noche" {{ old('jornada') == 'Noche' ? 'selected' : '' }}>Noche</option>
                         </select>
+                        @error('jornada')
+                            <div class="text-red-500">{{ $message }}</div>
+                        @enderror
                         <div class="flex flex-col">
                             <label for="time_start">Hora comienzo</label>
                             <input type="time" name="time_start" id="time_start"
                                 class="rounded-md p-2 border focus:border-green-500">
                         </div>
+                        @error('time_start')
+                            <div class="text-red-500">{{ $message }}</div>
+                        @enderror
                         <div class="flex flex-col">
                             <label for="time_end">Hora finalizacion</label>
                             <input type="time" name="time_end" id="time_end"
                                 class="rounded-md p-2 border focus:border-green-500">
                         </div>
+                        @error('time_end')
+                            <div class="text-red-500">{{ $message }}</div>
+                        @enderror
                         <div class="flex flex-col">
                             <label for="date_start">fecha inicio</label>
                             <input type="date" name="date_start" id="date_start"
                                 class="rounded-md p-2 border focus:border-green-500">
                         </div>
+                        @error('date_start')
+                            <div class="text-red-500">{{ $message }}</div>
+                        @enderror
                         <div class="flex flex-col">
                             <label for="date_end">Fecha finalizacion</label>
                             <input type="date" name="date_end" id="date_end"
                                 class="rounded-md p-2 border focus:border-green-500">
                         </div>
+                        @error('date_end')
+                            <div class="text-red-500">{{ $message }}</div>
+                        @enderror
 
                         <div class="flex flex-col">
-                            <label for="ficha_id">Instructor y el número de la ficha vinculados</label>
-                            <select class="rounded-md p-2 border focus:border-green-500" id="ficha_id" name="ficha_id">
+                            <label for="ficha_id">Numero de fichas vinculables disponibles</label>
+                            <select name="ficha_id" id="ficha_id" class="rounded-md p-2 border focus:border-green-500">
                                 @foreach ($fichas as $ficha)
-                                    @if ($ficha->instructors->isNotEmpty())
-                                        <optgroup label="Número de la ficha: {{ $ficha->number_ficha }}">
-                                            @foreach ($ficha->instructors as $instructor)
-                                                <option value="{{ $ficha->id_ficha }}">
-                                                    Instructor: {{ $instructor->name }} {{ $instructor->last_name }}
-                                                </option>
-                                            @endforeach
-                                        </optgroup>
-                                    @endif
+                                    <option value="{{ $ficha->id_ficha }}">{{ $ficha->number_ficha }}</option>
                                 @endforeach
                             </select>
                         </div>
+                        @error('ficha_id')
+                            <div class="text-red-500">{{ $message }}</div>
+                        @enderror
                         <button type="submit"
                             class="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-lg">Agregar</button>
                     </form>
@@ -100,7 +110,7 @@
                             Fecha de finalizacion</th>
                         <th
                             class="py-2 px-4 bg-grey-lightest font-bold uppercase text-sm text-grey-light border-b border-grey-light text-right">
-                            Instructor y ficha vinculados</th>
+                            Numero de la ficha vinculado</th>
 
 
                     </tr>
@@ -115,19 +125,7 @@
                             <td class="py-2 px-4 border-b border-grey-light text-center">{{$timeTable->date_end}}</td>
                             <td class="py-2 px-4 border-b border-grey-light text-center">{{ $timeTable->time_end }}</td>
                             <td class="py-2 px-4 border-b border-grey-light text-center">
-                                @if ($timeTable->ficha)
-                                Número de ficha: {{ $timeTable->ficha->number_ficha }}
-                                @if ($timeTable->ficha->instructors->isNotEmpty())
-                                    <br>Instructor(es):
-                                    @foreach ($timeTable->ficha->instructors as $instructor)
-                                    - {{ $instructor->name }} {{ $instructor->last_name }} <br>
-                                    @endforeach
-                                @else
-                                    <br>No hay instructor asignado
-                                @endif
-                            @else
-                                No encontrado código de la ficha
-                            @endif</td>
+                                {{ $timeTable->ficha->number_ficha }}</td>
                             <td class="py-2 px-4 border-b border-grey-light text-right">
 
                                 @can('timeTable.update')
@@ -144,7 +142,7 @@
                                         <div class="bg-white rounded-lg shadow-lg relative flex flex-col w-full p-6">
                                             <span class="absolute top-0 right-0 mt-4 mr-4 cursor-pointer"
                                                 onclick="closeEditModal({{ $timeTable->id_timeTable }})">×</span>
-                                            <h2 class="text-lg font-semibold mb-4">Editar Ficha</h2>
+                                            <h2 class="text-lg font-semibold mb-4">Editar Horario</h2>
                                             <form id="editForm-{{ $timeTable->id_timeTable }}" method="POST"
                                                 action="{{ route('timeTable.update', $timeTable->id_timeTable) }}"
                                                 class="space-y-4">
@@ -200,18 +198,13 @@
                                                 @enderror
 
                                                 <div class="flex flex-col">
-                                                    <label for="ficha_id">Instructor y el número de la ficha vinculados</label>
-                                                    <select class="rounded-md p-2 border focus:border-green-500" id="ficha_id" name="ficha_id">
+                                                    <label for="ficha_id">Numero de ficha</label>
+                                                    <select name="ficha_id" id="ficha_id"
+                                                        class="rounded-md p-2 border focus:border-green-500">
                                                         @foreach ($fichas as $ficha)
-                                                            @if ($ficha->instructors->isNotEmpty())
-                                                                <optgroup label="Número de la ficha: {{ $ficha->number_ficha }}">
-                                                                    @foreach ($ficha->instructors as $instructor)
-                                                                        <option value="{{ $instructor->id }}">
-                                                                            Instructor: {{ $instructor->name }} {{ $instructor->last_name }}
-                                                                        </option>
-                                                                    @endforeach
-                                                                </optgroup>
-                                                            @endif
+                                                            <option value="{{ $ficha->id_ficha }}"
+                                                                @if ($ficha->id_ficha === $timeTable->ficha_id) selected @endif>
+                                                                {{ $ficha->number_ficha }}</option>
                                                         @endforeach
                                                     </select>
                                                 </div>

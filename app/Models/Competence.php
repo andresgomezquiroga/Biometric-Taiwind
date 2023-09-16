@@ -15,10 +15,17 @@ class Competence extends Model
         'code_competence',
         'name_competence',
         'description',
+        'ficha_id',
     ];
     
     protected $hidden = [
         'created_at',
         'updated_at',
     ];
+
+    public function ficha()
+    {
+        return $this->belongsTo(Ficha::class, 'ficha_id');
+
+    }
 }

@@ -35,6 +35,17 @@
                                 <span class="text-red-500">{{ $message }}</span>
                             @enderror
                         </div>
+                        <div class="flex flex-col">
+                            <label for="ficha_id">Fichas vinculables</label>
+                            <select name="ficha_id" id="ficha_id" class="rounded-md p-2 border focus:border-green-500">
+                                @foreach ($fichas as $ficha)
+                                    <option value="{{ $ficha->id_ficha }}">{{ $ficha->number_ficha }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        @error('ficha_id')
+                            <div class="text-red-500">{{ $message }}</div>
+                        @enderror
                         <!-- Campo de comentarios -->
                         <div class="flex flex-col">
                             <label for="description">Descripcion de la competencia</label>
@@ -71,6 +82,10 @@
 
                         <th
                             class="py-2 px-4 bg-grey-lightest font-bold uppercase text-sm text-grey-light border-b border-grey-light text-center">
+                            Fichas vinculados</th>
+
+                        <th
+                            class="py-2 px-4 bg-grey-lightest font-bold uppercase text-sm text-grey-light border-b border-grey-light text-center">
                             Descripcion de la competencia</th>
 
                         @can('competence.destroy')
@@ -88,6 +103,13 @@
                         <tr class="hover:bg-grey-lighter">
                             <td class="py-2 px-4 border-b border-grey-light text-center">{{ $competence->code_competence }}</td>
                             <td class="py-2 px-4 border-b border-grey-light text-center">{{ $competence->name_competence }}</td>
+                            <td class="py-2 px-4 border-b border-grey-light text-center">
+                                @if ($competence->ficha)
+                                    {{ $competence->ficha->number_ficha }}
+                                @else
+                                    N/A
+                                @endif
+                            </td>
                             <td class="py-2 px-4 border-b border-grey-light text-center">{{ $competence->description }}</td>
                             <td class="py-2 px-4 border-b border-grey-light text-center">
 
@@ -126,6 +148,20 @@
                                                     <span class="text-red-500">{{ $message }}</span>
                                                 @enderror
                                             </div>
+                                                <div class="flex flex-col">
+                                                    <label for="ficha_id">Ficha vinculada</label>
+                                                    <select name="ficha_id" id="ficha_id"
+                                                        class="rounded-md p-2 border focus:border-green-500">
+                                                        @foreach ($fichas as $ficha)
+                                                            <option value="{{ $ficha->id_ficha }}"
+                                                                @if ($ficha->id_ficha === $competence->ficha_id) selected @endif>
+                                                                {{ $ficha->number_ficha }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                                @error('ficha_id')
+                                                <div class="text-red-500">{{ $message }}</div>
+                                                @enderror
                                             <div class="flex flex-col">
                                                 <label for="description">Descripcion</label>
                                                 <textarea value="{{ $competence->description }}" class="rounded-md p-2 border focus:border-green-500"
