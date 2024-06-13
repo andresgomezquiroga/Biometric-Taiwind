@@ -21,13 +21,8 @@ class UserFactory extends Factory
             'name' => fake()->name(),
             'last_name' => fake()->lastName(),
             'email' => fake()->unique()->safeEmail(),
-<<<<<<< HEAD
             'edad' => fake()->numberBetween(1, 100),
             'type_document' => fake()->randomElement(['CC', 'TI', 'CE']),
-=======
-            'edad' => fake()->numberBetween(18, 100),
-            'type_document' => fake()->randomElement(['CC', 'TI' , 'CE']),
->>>>>>> 1189d210c1278313fe8925d2610a6bd334ed514e
             'number_document' => fake()->numberBetween(10000000, 99999999),
             'image' => fake()->imageUrl(),
             'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
